@@ -63,7 +63,7 @@ kill -0 "$WORKER_PID" 2>/dev/null || { cat "$ROOT/.workspaces/worker1.log"; die 
 
 echo "==> starting the run (max_attempts=$MAX_ATTEMPTS)"
 "$PY" -m control_plane.cli run --repo "$SEED_DIR" --sha "$SHA" \
-  --max-attempts "$MAX_ATTEMPTS" >"$ROOT/.workspaces/run.log" 2>&1 &
+  --max-attempts "$MAX_ATTEMPTS" --force >"$ROOT/.workspaces/run.log" 2>&1 &
 RUN_PID=$!
 
 echo "==> waiting for this run's id"
