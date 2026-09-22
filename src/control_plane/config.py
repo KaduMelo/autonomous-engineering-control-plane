@@ -59,6 +59,9 @@ RUN_TESTS_TIMEOUT = timedelta(seconds=600)
 RUN_TESTS_HEARTBEAT = timedelta(seconds=30)
 HEARTBEAT_INTERVAL_S = 5.0
 PROPOSE_TIMEOUT = timedelta(seconds=300)
+# Without a heartbeat, a worker dying mid-proposal is only noticed when
+# PROPOSE_TIMEOUT expires - a five minute stall on every resume.
+PROPOSE_HEARTBEAT = timedelta(seconds=30)
 ANALYZE_TIMEOUT = timedelta(seconds=60)
 APPLY_TIMEOUT = timedelta(seconds=60)
 BRANCH_TIMEOUT = timedelta(seconds=60)

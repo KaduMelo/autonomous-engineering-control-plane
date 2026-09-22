@@ -1,0 +1,1368 @@
+{
+  "events": [
+    {
+      "eventId": "1",
+      "eventTime": "2026-09-22T13:14:58.574Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_EXECUTION_STARTED",
+      "workflowExecutionStartedEventAttributes": {
+        "attempt": 1,
+        "firstExecutionRunId": "2c083cde-9830-4e75-bed1-2e282c1af1d9",
+        "firstWorkflowTaskBackoff": "0s",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsIm1heF9hdHRlbXB0cyI6M30=",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "originalExecutionRunId": "2c083cde-9830-4e75-bed1-2e282c1af1d9",
+        "priority": {},
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowExecutionTimeout": "315360000s",
+        "workflowRunTimeout": "315360000s",
+        "workflowTaskTimeout": "10s",
+        "workflowType": {
+          "name": "FixWorkflow"
+        }
+      }
+    },
+    {
+      "eventId": "2",
+      "eventTime": "2026-09-22T13:14:58.574Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "3",
+      "eventTime": "2026-09-22T13:14:58.574Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "405",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "2"
+      }
+    },
+    {
+      "eventId": "4",
+      "eventTime": "2026-09-22T13:14:58.586Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "2",
+        "sdkMetadata": {
+          "coreUsedFlags": [
+            3,
+            1,
+            2
+          ],
+          "sdkName": "temporal-python",
+          "sdkVersion": "1.33.0"
+        }
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "1",
+        "activityType": {
+          "name": "run_tests"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOm51bGwsImF0dGVtcHQiOjB9",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "600s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "3"
+      },
+      "eventId": "5",
+      "eventTime": "2026-09-22T13:14:58.586Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "5"
+      },
+      "eventId": "6",
+      "eventTime": "2026-09-22T13:14:58.586Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJwYXNzZWQiOmZhbHNlLCJvdXRwdXQiOiIzIGZhaWxlZCwgNCBwYXNzZWQiLCJmYWlsaW5nX3Rlc3RzIjpbInRlc3RzL3Rlc3RfcHJpY2luZy5weTo6dGVzdF9hcHBseV9kaXNjb3VudCJdLCJkdXJhdGlvbl9zIjowLjB9",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "5",
+        "startedEventId": "6"
+      },
+      "eventId": "7",
+      "eventTime": "2026-09-22T13:14:58.588Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "8",
+      "eventTime": "2026-09-22T13:14:58.588Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "9",
+      "eventTime": "2026-09-22T13:14:58.588Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "1209",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "8"
+      }
+    },
+    {
+      "eventId": "10",
+      "eventTime": "2026-09-22T13:14:58.592Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "8",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "2",
+        "activityType": {
+          "name": "analyze_repo"
+        },
+        "header": {},
+        "heartbeatTimeout": "0s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImJhc2VsaW5lIjp7InBhc3NlZCI6ZmFsc2UsIm91dHB1dCI6IjMgZmFpbGVkLCA0IHBhc3NlZCIsImZhaWxpbmdfdGVzdHMiOlsidGVzdHMvdGVzdF9wcmljaW5nLnB5Ojp0ZXN0X2FwcGx5X2Rpc2NvdW50Il0sImR1cmF0aW9uX3MiOjAuMH19",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "60s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "9"
+      },
+      "eventId": "11",
+      "eventTime": "2026-09-22T13:14:58.592Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "11"
+      },
+      "eventId": "12",
+      "eventTime": "2026-09-22T13:14:58.592Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJmYWlsaW5nX3Rlc3RzIjpbInRlc3RzL3Rlc3RfcHJpY2luZy5weTo6dGVzdF9hcHBseV9kaXNjb3VudCJdLCJmYWlsdXJlX291dHB1dCI6IjMgZmFpbGVkLCA0IHBhc3NlZCIsInNvdXJjZXMiOlt7InBhdGgiOiJzcmMvY2FsY3VsYXRvci9wcmljaW5nLnB5IiwiY29udGVudCI6Ii4uLiJ9XX0=",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "11",
+        "startedEventId": "12"
+      },
+      "eventId": "13",
+      "eventTime": "2026-09-22T13:14:58.594Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "14",
+      "eventTime": "2026-09-22T13:14:58.594Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "15",
+      "eventTime": "2026-09-22T13:14:58.594Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "2142",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "14"
+      }
+    },
+    {
+      "eventId": "16",
+      "eventTime": "2026-09-22T13:14:58.596Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "14",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "3",
+        "activityType": {
+          "name": "propose_fix"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJjb250ZXh0Ijp7ImZhaWxpbmdfdGVzdHMiOlsidGVzdHMvdGVzdF9wcmljaW5nLnB5Ojp0ZXN0X2FwcGx5X2Rpc2NvdW50Il0sImZhaWx1cmVfb3V0cHV0IjoiMyBmYWlsZWQsIDQgcGFzc2VkIiwic291cmNlcyI6W3sicGF0aCI6InNyYy9jYWxjdWxhdG9yL3ByaWNpbmcucHkiLCJjb250ZW50IjoiLi4uIn1dfSwiaGlzdG9yeSI6W119",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "300s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "15"
+      },
+      "eventId": "17",
+      "eventTime": "2026-09-22T13:14:58.596Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "17"
+      },
+      "eventId": "18",
+      "eventTime": "2026-09-22T13:14:58.596Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJkaWZmIjoiZGlmZi0xIiwicmF0aW9uYWxlIjoiYXR0ZW1wdCAxIiwidHJlZV9oYXNoIjpudWxsfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "17",
+        "startedEventId": "18"
+      },
+      "eventId": "19",
+      "eventTime": "2026-09-22T13:14:58.597Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "20",
+      "eventTime": "2026-09-22T13:14:58.597Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "21",
+      "eventTime": "2026-09-22T13:14:58.597Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "2943",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "20"
+      }
+    },
+    {
+      "eventId": "22",
+      "eventTime": "2026-09-22T13:14:58.599Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "20",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "4",
+        "activityType": {
+          "name": "apply_patch"
+        },
+        "header": {},
+        "heartbeatTimeout": "0s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOiJkaWZmLTEifQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "60s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "21"
+      },
+      "eventId": "23",
+      "eventTime": "2026-09-22T13:14:58.599Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "23"
+      },
+      "eventId": "24",
+      "eventTime": "2026-09-22T13:14:58.600Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJkaWZmIjoiZGlmZi0xIiwicmF0aW9uYWxlIjoiIiwidHJlZV9oYXNoIjoidHJlZS1kaWZmLTEifQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "23",
+        "startedEventId": "24"
+      },
+      "eventId": "25",
+      "eventTime": "2026-09-22T13:14:58.601Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "26",
+      "eventTime": "2026-09-22T13:14:58.601Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "27",
+      "eventTime": "2026-09-22T13:14:58.601Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "3637",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "26"
+      }
+    },
+    {
+      "eventId": "28",
+      "eventTime": "2026-09-22T13:14:58.603Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "26",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "5",
+        "activityType": {
+          "name": "run_tests"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOiJkaWZmLTEiLCJhdHRlbXB0IjoxfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "600s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "27"
+      },
+      "eventId": "29",
+      "eventTime": "2026-09-22T13:14:58.603Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "29"
+      },
+      "eventId": "30",
+      "eventTime": "2026-09-22T13:14:58.604Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJwYXNzZWQiOmZhbHNlLCJvdXRwdXQiOiJhdHRlbXB0IDEiLCJmYWlsaW5nX3Rlc3RzIjpbXSwiZHVyYXRpb25fcyI6MC4wfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "29",
+        "startedEventId": "30"
+      },
+      "eventId": "31",
+      "eventTime": "2026-09-22T13:14:58.605Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "32",
+      "eventTime": "2026-09-22T13:14:58.605Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "33",
+      "eventTime": "2026-09-22T13:14:58.605Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "4362",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "32"
+      }
+    },
+    {
+      "eventId": "34",
+      "eventTime": "2026-09-22T13:14:58.607Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "32",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "6",
+        "activityType": {
+          "name": "propose_fix"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJjb250ZXh0Ijp7ImZhaWxpbmdfdGVzdHMiOlsidGVzdHMvdGVzdF9wcmljaW5nLnB5Ojp0ZXN0X2FwcGx5X2Rpc2NvdW50Il0sImZhaWx1cmVfb3V0cHV0IjoiMyBmYWlsZWQsIDQgcGFzc2VkIiwic291cmNlcyI6W3sicGF0aCI6InNyYy9jYWxjdWxhdG9yL3ByaWNpbmcucHkiLCJjb250ZW50IjoiLi4uIn1dfSwiaGlzdG9yeSI6W3sib3JkaW5hbCI6MSwiY2hhbmdlIjp7ImRpZmYiOiJkaWZmLTEiLCJyYXRpb25hbGUiOiJhdHRlbXB0IDEiLCJ0cmVlX2hhc2giOiJ0cmVlLWRpZmYtMSJ9LCJhcHBsaWVkIjp0cnVlLCJyZXN1bHQiOnsicGFzc2VkIjpmYWxzZSwib3V0cHV0IjoiYXR0ZW1wdCAxIiwiZmFpbGluZ190ZXN0cyI6W10sImR1cmF0aW9uX3MiOjAuMH19XX0=",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "300s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "33"
+      },
+      "eventId": "35",
+      "eventTime": "2026-09-22T13:14:58.607Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "35"
+      },
+      "eventId": "36",
+      "eventTime": "2026-09-22T13:14:58.607Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJkaWZmIjoiZGlmZi0yIiwicmF0aW9uYWxlIjoiYXR0ZW1wdCAyIiwidHJlZV9oYXNoIjpudWxsfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "35",
+        "startedEventId": "36"
+      },
+      "eventId": "37",
+      "eventTime": "2026-09-22T13:14:58.608Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "38",
+      "eventTime": "2026-09-22T13:14:58.608Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "39",
+      "eventTime": "2026-09-22T13:14:58.608Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "5351",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "38"
+      }
+    },
+    {
+      "eventId": "40",
+      "eventTime": "2026-09-22T13:14:58.610Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "38",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "7",
+        "activityType": {
+          "name": "apply_patch"
+        },
+        "header": {},
+        "heartbeatTimeout": "0s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOiJkaWZmLTIifQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "60s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "39"
+      },
+      "eventId": "41",
+      "eventTime": "2026-09-22T13:14:58.610Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "41"
+      },
+      "eventId": "42",
+      "eventTime": "2026-09-22T13:14:58.610Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJkaWZmIjoiZGlmZi0yIiwicmF0aW9uYWxlIjoiIiwidHJlZV9oYXNoIjoidHJlZS1kaWZmLTIifQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "41",
+        "startedEventId": "42"
+      },
+      "eventId": "43",
+      "eventTime": "2026-09-22T13:14:58.611Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "44",
+      "eventTime": "2026-09-22T13:14:58.611Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "45",
+      "eventTime": "2026-09-22T13:14:58.611Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "6045",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "44"
+      }
+    },
+    {
+      "eventId": "46",
+      "eventTime": "2026-09-22T13:14:58.613Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "44",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "8",
+        "activityType": {
+          "name": "run_tests"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOiJkaWZmLTIiLCJhdHRlbXB0IjoyfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "600s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "45"
+      },
+      "eventId": "47",
+      "eventTime": "2026-09-22T13:14:58.613Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "47"
+      },
+      "eventId": "48",
+      "eventTime": "2026-09-22T13:14:58.613Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJwYXNzZWQiOmZhbHNlLCJvdXRwdXQiOiJhdHRlbXB0IDIiLCJmYWlsaW5nX3Rlc3RzIjpbXSwiZHVyYXRpb25fcyI6MC4wfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "47",
+        "startedEventId": "48"
+      },
+      "eventId": "49",
+      "eventTime": "2026-09-22T13:14:58.614Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "50",
+      "eventTime": "2026-09-22T13:14:58.614Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "51",
+      "eventTime": "2026-09-22T13:14:58.615Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "6770",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "50"
+      }
+    },
+    {
+      "eventId": "52",
+      "eventTime": "2026-09-22T13:14:58.617Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "50",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "9",
+        "activityType": {
+          "name": "propose_fix"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJjb250ZXh0Ijp7ImZhaWxpbmdfdGVzdHMiOlsidGVzdHMvdGVzdF9wcmljaW5nLnB5Ojp0ZXN0X2FwcGx5X2Rpc2NvdW50Il0sImZhaWx1cmVfb3V0cHV0IjoiMyBmYWlsZWQsIDQgcGFzc2VkIiwic291cmNlcyI6W3sicGF0aCI6InNyYy9jYWxjdWxhdG9yL3ByaWNpbmcucHkiLCJjb250ZW50IjoiLi4uIn1dfSwiaGlzdG9yeSI6W3sib3JkaW5hbCI6MSwiY2hhbmdlIjp7ImRpZmYiOiJkaWZmLTEiLCJyYXRpb25hbGUiOiJhdHRlbXB0IDEiLCJ0cmVlX2hhc2giOiJ0cmVlLWRpZmYtMSJ9LCJhcHBsaWVkIjp0cnVlLCJyZXN1bHQiOnsicGFzc2VkIjpmYWxzZSwib3V0cHV0IjoiYXR0ZW1wdCAxIiwiZmFpbGluZ190ZXN0cyI6W10sImR1cmF0aW9uX3MiOjAuMH19LHsib3JkaW5hbCI6MiwiY2hhbmdlIjp7ImRpZmYiOiJkaWZmLTIiLCJyYXRpb25hbGUiOiJhdHRlbXB0IDIiLCJ0cmVlX2hhc2giOiJ0cmVlLWRpZmYtMiJ9LCJhcHBsaWVkIjp0cnVlLCJyZXN1bHQiOnsicGFzc2VkIjpmYWxzZSwib3V0cHV0IjoiYXR0ZW1wdCAyIiwiZmFpbGluZ190ZXN0cyI6W10sImR1cmF0aW9uX3MiOjAuMH19XX0=",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "300s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "51"
+      },
+      "eventId": "53",
+      "eventTime": "2026-09-22T13:14:58.617Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "53"
+      },
+      "eventId": "54",
+      "eventTime": "2026-09-22T13:14:58.617Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJkaWZmIjoiZGlmZi0zIiwicmF0aW9uYWxlIjoiYXR0ZW1wdCAzIiwidHJlZV9oYXNoIjpudWxsfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "53",
+        "startedEventId": "54"
+      },
+      "eventId": "55",
+      "eventTime": "2026-09-22T13:14:58.618Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "56",
+      "eventTime": "2026-09-22T13:14:58.618Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "57",
+      "eventTime": "2026-09-22T13:14:58.618Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "7948",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "56"
+      }
+    },
+    {
+      "eventId": "58",
+      "eventTime": "2026-09-22T13:14:58.620Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "56",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "10",
+        "activityType": {
+          "name": "apply_patch"
+        },
+        "header": {},
+        "heartbeatTimeout": "0s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOiJkaWZmLTMifQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "60s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "57"
+      },
+      "eventId": "59",
+      "eventTime": "2026-09-22T13:14:58.620Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "59"
+      },
+      "eventId": "60",
+      "eventTime": "2026-09-22T13:14:58.620Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJkaWZmIjoiZGlmZi0zIiwicmF0aW9uYWxlIjoiIiwidHJlZV9oYXNoIjoidHJlZS1kaWZmLTMifQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "59",
+        "startedEventId": "60"
+      },
+      "eventId": "61",
+      "eventTime": "2026-09-22T13:14:58.621Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "62",
+      "eventTime": "2026-09-22T13:14:58.621Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "63",
+      "eventTime": "2026-09-22T13:14:58.621Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "8643",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "62"
+      }
+    },
+    {
+      "eventId": "64",
+      "eventTime": "2026-09-22T13:14:58.623Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "62",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "11",
+        "activityType": {
+          "name": "run_tests"
+        },
+        "header": {},
+        "heartbeatTimeout": "30s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImRpZmYiOiJkaWZmLTMiLCJhdHRlbXB0IjozfQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "600s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "63"
+      },
+      "eventId": "65",
+      "eventTime": "2026-09-22T13:14:58.623Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "65"
+      },
+      "eventId": "66",
+      "eventTime": "2026-09-22T13:14:58.623Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJwYXNzZWQiOnRydWUsIm91dHB1dCI6ImF0dGVtcHQgMyIsImZhaWxpbmdfdGVzdHMiOltdLCJkdXJhdGlvbl9zIjowLjB9",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "65",
+        "startedEventId": "66"
+      },
+      "eventId": "67",
+      "eventTime": "2026-09-22T13:14:58.624Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "68",
+      "eventTime": "2026-09-22T13:14:58.624Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "69",
+      "eventTime": "2026-09-22T13:14:58.624Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "9368",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "68"
+      }
+    },
+    {
+      "eventId": "70",
+      "eventTime": "2026-09-22T13:14:58.626Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "68",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "12",
+        "activityType": {
+          "name": "create_fix_branch"
+        },
+        "header": {},
+        "heartbeatTimeout": "0s",
+        "input": {
+          "payloads": [
+            {
+              "data": "eyJyZXBvX3BhdGgiOiIvc2VlZCIsInJldmlzaW9uIjoiNGIxYTBkNDMxYzRlZGEyNmE0ODU0OTZlM2Y1MDUwNGRkNDlkN2YyZiIsImNoYW5nZSI6eyJkaWZmIjoiZGlmZi0zIiwicmF0aW9uYWxlIjoiYXR0ZW1wdCAzIiwidHJlZV9oYXNoIjoidHJlZS1kaWZmLTMifX0=",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "priority": {},
+        "retryPolicy": {
+          "backoffCoefficient": 2.0,
+          "initialInterval": "1s",
+          "maximumAttempts": 3,
+          "maximumInterval": "60s",
+          "nonRetryableErrorTypes": [
+            "PatchApplyError",
+            "BranchConflictError"
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "60s",
+        "taskQueue": {
+          "kind": "TASK_QUEUE_KIND_NORMAL",
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        },
+        "workflowTaskCompletedEventId": "69"
+      },
+      "eventId": "71",
+      "eventTime": "2026-09-22T13:14:58.626Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED"
+    },
+    {
+      "activityTaskStartedEventAttributes": {
+        "attempt": 1,
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "71"
+      },
+      "eventId": "72",
+      "eventTime": "2026-09-22T13:14:58.626Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED"
+    },
+    {
+      "activityTaskCompletedEventAttributes": {
+        "identity": "298168@kadu-Dell-G15-5530",
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJuYW1lIjoiZml4LzRiMWEwZDQzMWM0ZWRhMjZhNDg1NDk2ZTNmNTA1MDRkZDQ5ZDdmMmYiLCJjb21taXQiOiJjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjIiwiY3JlYXRlZCI6dHJ1ZX0=",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "scheduledEventId": "71",
+        "startedEventId": "72"
+      },
+      "eventId": "73",
+      "eventTime": "2026-09-22T13:14:58.627Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED"
+    },
+    {
+      "eventId": "74",
+      "eventTime": "2026-09-22T13:14:58.627Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "attempt": 1,
+        "startToCloseTimeout": "10s",
+        "taskQueue": {
+          "name": "capture-3adea8cdd7a54355864640677c9bd2af"
+        }
+      }
+    },
+    {
+      "eventId": "75",
+      "eventTime": "2026-09-22T13:14:58.627Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "historySizeBytes": "10200",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "scheduledEventId": "74"
+      }
+    },
+    {
+      "eventId": "76",
+      "eventTime": "2026-09-22T13:14:58.629Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "binaryChecksum": "d2cb7057be5779a6bffe94476900add1",
+        "identity": "298168@kadu-Dell-G15-5530",
+        "meteringMetadata": {},
+        "scheduledEventId": "74",
+        "sdkMetadata": {}
+      }
+    },
+    {
+      "eventId": "77",
+      "eventTime": "2026-09-22T13:14:58.629Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED",
+      "workflowExecutionCompletedEventAttributes": {
+        "result": {
+          "payloads": [
+            {
+              "data": "eyJzdGF0dXMiOiJmaXhlZCIsImF0dGVtcHRzIjpbeyJvcmRpbmFsIjoxLCJjaGFuZ2UiOnsiZGlmZiI6ImRpZmYtMSIsInJhdGlvbmFsZSI6ImF0dGVtcHQgMSIsInRyZWVfaGFzaCI6InRyZWUtZGlmZi0xIn0sImFwcGxpZWQiOnRydWUsInJlc3VsdCI6eyJwYXNzZWQiOmZhbHNlLCJvdXRwdXQiOiJhdHRlbXB0IDEiLCJmYWlsaW5nX3Rlc3RzIjpbXSwiZHVyYXRpb25fcyI6MC4wfX0seyJvcmRpbmFsIjoyLCJjaGFuZ2UiOnsiZGlmZiI6ImRpZmYtMiIsInJhdGlvbmFsZSI6ImF0dGVtcHQgMiIsInRyZWVfaGFzaCI6InRyZWUtZGlmZi0yIn0sImFwcGxpZWQiOnRydWUsInJlc3VsdCI6eyJwYXNzZWQiOmZhbHNlLCJvdXRwdXQiOiJhdHRlbXB0IDIiLCJmYWlsaW5nX3Rlc3RzIjpbXSwiZHVyYXRpb25fcyI6MC4wfX0seyJvcmRpbmFsIjozLCJjaGFuZ2UiOnsiZGlmZiI6ImRpZmYtMyIsInJhdGlvbmFsZSI6ImF0dGVtcHQgMyIsInRyZWVfaGFzaCI6InRyZWUtZGlmZi0zIn0sImFwcGxpZWQiOnRydWUsInJlc3VsdCI6eyJwYXNzZWQiOnRydWUsIm91dHB1dCI6ImF0dGVtcHQgMyIsImZhaWxpbmdfdGVzdHMiOltdLCJkdXJhdGlvbl9zIjowLjB9fV0sIndpbm5pbmdfY2hhbmdlIjp7ImRpZmYiOiJkaWZmLTMiLCJyYXRpb25hbGUiOiJhdHRlbXB0IDMiLCJ0cmVlX2hhc2giOiJ0cmVlLWRpZmYtMyJ9LCJicmFuY2giOnsibmFtZSI6ImZpeC80YjFhMGQ0MzFjNGVkYTI2YTQ4NTQ5NmUzZjUwNTA0ZGQ0OWQ3ZjJmIiwiY29tbWl0IjoiY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjYyIsImNyZWF0ZWQiOnRydWV9fQ==",
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg=="
+              }
+            }
+          ]
+        },
+        "workflowTaskCompletedEventId": "75"
+      }
+    }
+  ]
+}

@@ -74,6 +74,7 @@ class FixWorkflow:
                 propose_fix,
                 ProposeInput(context=context, history=attempts),
                 start_to_close_timeout=config.PROPOSE_TIMEOUT,
+                heartbeat_timeout=config.PROPOSE_HEARTBEAT,
                 retry_policy=config.retry_policy(),
             )
 

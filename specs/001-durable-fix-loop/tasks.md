@@ -113,15 +113,15 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 ### Tests for User Story 3
 
-- [ ] T031 [P] [US3] Determinism test in `tests/replay/test_determinism.py` — `temporalio.worker.Replayer` against a checked-in history, failing loudly on any non-deterministic change to workflow code (SC-008)
+- [X] T031 [P] [US3] Determinism test in `tests/replay/test_determinism.py` — `temporalio.worker.Replayer` against a checked-in history, failing loudly on any non-deterministic change to workflow code (SC-008)
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Enforce determinism in `src/control_plane/workflows/fix_workflow.py` — wrap domain and activity-stub imports in `workflow.unsafe.imports_passed_through()`, remove every clock read, random source and I/O call, using `workflow.now()` where time is genuinely needed (depends on T028)
-- [ ] T033 [US3] Configure retry policies in `src/control_plane/config.py` and `worker.py` — shared backoff (1s initial, ×2, 60s cap, 3 attempts) and `non_retryable_error_types` listing `BranchConflictError`, `PatchApplyError` and the non-retryable LLM failures (depends on T029)
-- [ ] T034 [US3] Capture a real run's event history into `tests/replay/histories/` and wire it into T031 (depends on T030, T032)
-- [ ] T035 [US3] Write `scripts/demo_kill_resume.sh` — start a run, wait until the history shows attempt 3 in flight, kill the worker, start a replacement, and print where it resumed (depends on T030)
-- [ ] T036 [US3] Add the SC-003 verification recipe to [quickstart.md](./quickstart.md) — how to count `propose_fix` entries in the history and why `max_retries=0` is what makes that count trustworthy
+- [X] T032 [US3] Enforce determinism in `src/control_plane/workflows/fix_workflow.py` — wrap domain and activity-stub imports in `workflow.unsafe.imports_passed_through()`, remove every clock read, random source and I/O call, using `workflow.now()` where time is genuinely needed (depends on T028)
+- [X] T033 [US3] Configure retry policies in `src/control_plane/config.py` and `worker.py` — shared backoff (1s initial, ×2, 60s cap, 3 attempts) and `non_retryable_error_types` listing `BranchConflictError`, `PatchApplyError` and the non-retryable LLM failures (depends on T029)
+- [X] T034 [US3] Capture a real run's event history into `tests/replay/histories/` and wire it into T031 (depends on T030, T032)
+- [X] T035 [US3] Write `scripts/demo_kill_resume.sh` — start a run, wait until the history shows attempt 3 in flight, kill the worker, start a replacement, and print where it resumed (depends on T030)
+- [X] T036 [US3] Add the SC-003 verification recipe to [quickstart.md](./quickstart.md) — how to count `propose_fix` entries in the history and why `max_retries=0` is what makes that count trustworthy
 
 **Checkpoint**: The headline guarantee is demonstrable and the determinism regression is caught automatically.
 

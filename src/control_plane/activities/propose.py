@@ -6,10 +6,13 @@ request or a bad credential is not, and retrying it only burns the budget.
 
 from __future__ import annotations
 
+import asyncio
+
 import anthropic
 from temporalio import activity
 from temporalio.exceptions import ApplicationError
 
+from control_plane import config
 from control_plane.adapters.fixer import AnthropicFixer, FixerPort
 from control_plane.domain.models import ProposedChange, ProposeInput
 
@@ -39,8 +42,27 @@ def _get_fixer() -> FixerPort:
     return _fixer
 
 
+async def _heartbeat_forever(attempt: int) -> None:
+    """Report liveness while the model is thinking (FR-011).
+
+    Without this, a worker that dies mid-proposal leaves the activity looking
+    alive until PROPOSE_TIMEOUT expires, so the replacement worker sits idle for
+    up to five minutes before Temporal reschedules the attempt. Measured on the
+    kill-resume demo: about four minutes end to end without the heartbeat,
+    1m02s with it.
+    """
+    elapsed = 0.0
+    while True:
+        await asyncio.sleep(config.HEARTBEAT_INTERVAL_S)
+        elapsed += config.HEARTBEAT_INTERVAL_S
+        activity.heartbeat({"attempt": attempt, "elapsed_s": elapsed})
+
+
 @activity.defn
 async def propose_fix(request: ProposeInput) -> ProposedChange:
+    beat: asyncio.Task[None] | None = None
+    if activity.in_activity():
+        beat = asyncio.create_task(_heartbeat_forever(len(request.history) + 1))
     try:
         proposal = await _get_fixer().propose(request.context, request.history)
     except NON_RETRYABLE as exc:
@@ -51,4 +73,7 @@ async def propose_fix(request: ProposeInput) -> ProposedChange:
         ) from exc
     # Everything else - RateLimitError, InternalServerError, APIConnectionError,
     # APITimeoutError - propagates so Temporal retries with backoff.
+    finally:
+        if beat is not None:
+            beat.cancel()
     return ProposedChange(diff=proposal.diff, rationale=proposal.rationale)
