@@ -34,12 +34,17 @@ async def _run(repo_path: str, revision: str, max_attempts: int, as_json: bool) 
     client = await connect()
     workflow_id = f"fix-{revision}"
 
-    outcome: RunOutcome = await client.execute_workflow(
+    handle = await client.start_workflow(
         FixWorkflow.run,
         FixRequest(repo_path=repo_path, revision=revision, max_attempts=max_attempts),
         id=workflow_id,
         task_queue=config.TASK_QUEUE,
     )
+    # Printed before the result so tooling can scope to *this* run: the workflow
+    # id is stable by design, so it alone points at whichever run was latest.
+    print(f"run_id     {handle.result_run_id}", flush=True)
+
+    outcome: RunOutcome = await handle.result()
 
     if as_json:
         print(outcome.model_dump_json(indent=2))

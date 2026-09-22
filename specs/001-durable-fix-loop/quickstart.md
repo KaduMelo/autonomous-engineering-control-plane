@@ -61,20 +61,62 @@ The branch exists and your working tree is exactly as you left it.
 ## The kill-resume demo (SC-002, SC-003)
 
 ```bash
-./scripts/demo_kill_resume.sh
+temporal server start-dev          # terminal 1
+./scripts/demo_kill_resume.sh      # terminal 2 - starts and kills its own workers
 ```
 
-The script starts a run, waits until the history shows attempt 3 in flight, kills the worker process,
-and starts a fresh one.
+The script starts a run, waits until the history shows the configured attempt in
+flight, kills the worker, starts a replacement, and then **checks that it proved
+something**:
 
-**Expected**: the run resumes at attempt 3. Open the Temporal Web UI at <http://localhost:8233>, find
-`fix-<sha>`, and read the event history:
+```text
+distinct workers    2
+  -> the run was served by more than one worker: it survived a restart
 
-- `ActivityTaskCompleted` for attempts 1 and 2 appear **once each**. They are not re-executed.
-- `propose_fix` appears exactly as many times as there were attempts — no duplicates for the attempts
-  that had already finished. That count is SC-003, and it is trustworthy only because the Anthropic
-  client runs with `max_retries=0`, so one history entry equals one billed call.
-- The run completes normally on the new worker.
+SC-003: propose_fix scheduled 3 time(s).
+
+PROVEN: 2 workers served this run - it resumed after the kill,
+        and propose_fix was scheduled once per attempt, never re-billed.
+```
+
+If the kill lands after the run has already finished, the script exits `2` with
+`INCONCLUSIVE` rather than reporting success. A demo that can pass without
+demonstrating the thing is worse than no demo.
+
+### It does not call the model
+
+`scripts/worker_scripted.py` swaps the `FixerPort` for a script - two wrong
+answers, then the right one. What is under test is durability, not the model,
+and billing real tokens to demonstrate something unrelated to them is waste.
+
+To run the same flow against Claude, use the real worker and start the run
+yourself:
+
+```bash
+python -m control_plane.worker                                   # terminal 2
+python -m control_plane.cli run --repo .workspaces/seed --sha <sha>   # terminal 3
+```
+
+The scripted fixer sleeps `FIXER_DELAY_S` (default 8s) per proposal, standing in
+for real model latency. Without it the whole run finishes in about five seconds,
+the kill lands after the fact, and the demo reports `INCONCLUSIVE`.
+
+### Reading the evidence yourself
+
+```bash
+python scripts/inspect_history.py fix-<sha>                       # the narrative
+python scripts/inspect_history.py fix-<sha> --count propose_fix   # just the number
+```
+
+**Why that count is trustworthy.** `AnthropicFixer` runs with `max_retries=0`,
+so one scheduled activity is one billed call. With the SDK's default of two
+retries, three Temporal attempts could hide nine calls behind three history
+entries and this number would mean nothing.
+
+**Pass `--run-id`** when re-running a demo on the same revision. The workflow id
+is `fix-<sha>` by design, so it points at whichever run is latest - without the
+run id you may be reading the previous run's history. The CLI prints the run id
+as its first line.
 
 ## Verification checklist
 
