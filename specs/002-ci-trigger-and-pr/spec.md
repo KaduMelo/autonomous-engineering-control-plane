@@ -239,8 +239,10 @@ is distinguishable from the ingress's own output.
   deduplication without reading the run history.
 - **SC-009**: A reviewer can tell from the pull request alone what broke, what changed, and how many
   attempts it took, without opening the durable engine's UI.
-- **SC-010**: The full suite and both demo scripts pass on a machine with no network access, no
-  repository-host token and no CI platform configured.
+- **SC-010**: No repository host, CI platform or model provider is contacted by the suite or by the
+  demos, and every default endpoint is loopback — verified by an automated test. (Narrower than "runs
+  unplugged" on purpose: the Temporal test server is a binary the toolchain fetches once. Claiming
+  the absolute would be false.)
 
 ## Assumptions
 

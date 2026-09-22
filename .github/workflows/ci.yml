@@ -44,10 +44,13 @@ jobs:
       - name: Test
         run: .venv/bin/python -m pytest -q
         env:
-          # No credential is set on purpose. Every test drives the loop through
-          # a scripted FixerPort; a suite that needs an API key to pass would be
-          # a suite nobody runs.
+          # No credential is set on purpose. Every test drives the loop through a
+          # scripted FixerPort and a local repository-host stand-in; a suite that
+          # needs credentials to pass is a suite nobody runs. tests/unit/
+          # test_offline_by_default.py asserts that nothing reaches off-machine.
           ANTHROPIC_API_KEY: ""
+          CONTROL_PLANE_HOST_TOKEN: ""
+          CONTROL_PLANE_WEBHOOK_SECRET: ""
 
       # The recorded history is a fixture, not build output. If it no longer
       # matches the workflow, the replay test above already failed - this only
