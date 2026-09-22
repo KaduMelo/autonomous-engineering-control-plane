@@ -76,7 +76,12 @@ RETRY_BACKOFF_COEFFICIENT = 2.0
 RETRY_MAXIMUM_INTERVAL = timedelta(seconds=60)
 RETRY_MAXIMUM_ATTEMPTS = 3
 # Retrying these cannot change the outcome, so they fail the activity at once.
-NON_RETRYABLE_ERROR_TYPES = ("PatchApplyError", "BranchConflictError")
+NON_RETRYABLE_ERROR_TYPES = (
+    "PatchApplyError",
+    "BranchConflictError",
+    "UnknownRevision",
+    "HostApiError",
+)
 
 
 def retry_policy() -> RetryPolicy:

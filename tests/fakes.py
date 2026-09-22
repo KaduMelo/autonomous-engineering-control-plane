@@ -16,9 +16,12 @@ from control_plane.domain.models import (
     AnalyzeInput,
     ApplyInput,
     BranchInput,
+    CloneInput,
     FixBranch,
+    OpenPullRequestInput,
     ProposedChange,
     ProposeInput,
+    PullRequestRef,
     RepositoryContext,
     RunTestsInput,
     SourceFile,
@@ -27,6 +30,11 @@ from control_plane.domain.models import (
 
 REVISION = "4b1a0d431c4eda26a485496e3f50504dd49d7f2f"
 OUTCOMES = ["red", "red", "green"]
+
+
+@activity.defn(name="ensure_clone")
+async def ensure_clone(request: CloneInput) -> str:
+    return "cache-key"
 
 
 @activity.defn(name="run_tests")
@@ -66,4 +74,9 @@ async def create_fix_branch(request: BranchInput) -> FixBranch:
     return FixBranch(name=f"fix/{request.revision}", commit="c" * 40, created=True)
 
 
-ALL = [run_tests, analyze_repo, propose_fix, apply_patch, create_fix_branch]
+@activity.defn(name="open_pr")
+async def open_pr(request: OpenPullRequestInput) -> PullRequestRef:
+    return PullRequestRef(number=1, url="http://host.invalid/pull/1", created=True)
+
+
+ALL = [ensure_clone, open_pr, run_tests, analyze_repo, propose_fix, apply_patch, create_fix_branch]

@@ -45,8 +45,9 @@ async def test_the_history_covers_the_full_loop(recorded):
         for event in recorded.events
         if event.event_type == EventType.EVENT_TYPE_ACTIVITY_TASK_COMPLETED
     )
-    # baseline + analyze + (propose, apply, run_tests) x 3 + create_fix_branch
-    assert completed == 12, f"expected 12 completed activities, recorded {completed}"
+    # ensure_clone + baseline + analyze + (propose, apply, run_tests) x 3
+    # + create_fix_branch + open_pr
+    assert completed == 14, f"expected 14 completed activities, recorded {completed}"
 
 
 async def test_propose_fix_appears_once_per_attempt(recorded):
@@ -62,6 +63,16 @@ async def test_propose_fix_appears_once_per_attempt(recorded):
         if e.activity_task_scheduled_event_attributes.activity_type.name == "propose_fix"
     ]
     assert len(proposals) == 3, "one proposal per attempt, never more"
+
+
+async def test_the_history_covers_the_pull_request(recorded):
+    """A history that stopped at the branch would pin less than it looks."""
+    scheduled = {
+        event.activity_task_scheduled_event_attributes.activity_type.name
+        for event in recorded.events
+        if event.event_type == EventType.EVENT_TYPE_ACTIVITY_TASK_SCHEDULED
+    }
+    assert {"ensure_clone", "open_pr"} <= scheduled
 
 
 async def test_the_history_is_a_completed_run(recorded):

@@ -34,11 +34,21 @@ class _Frozen(BaseModel):
 
 
 class FixRequest(_Frozen):
-    """What the operator hands over. Its revision determines the run's identity."""
+    """What starts a run. Its revision determines the run's identity.
+
+    `repo_path` is a clone source: a URL or a local path.
+
+    `repository_full_name` is what decides whether a pull request is opened at
+    all. A hosted repository has one; a local path handed over by an operator
+    does not, and a pull request needs a host. The workflow reads this field
+    rather than probing the repository, because probing is I/O and the workflow
+    must stay deterministic.
+    """
 
     repo_path: str
     revision: str
     max_attempts: int = 3
+    repository_full_name: str | None = None
 
 
 class SourceFile(_Frozen):

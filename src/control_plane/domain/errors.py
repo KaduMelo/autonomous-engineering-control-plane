@@ -52,6 +52,12 @@ class CloneError(ControlPlaneError):
 class HostApiError(ControlPlaneError):
     """The repository host refused or failed.
 
-    Retryable only for 5xx and rate limits. A bad credential or a missing
-    repository is raised as non-retryable: three more attempts will not help.
+    Carries whether retrying could help, because only the adapter knows: a 429
+    or a 502 is worth another attempt, a 401 or a missing repository is not.
+    The activity turns `retryable=False` into a non-retryable ApplicationError
+    rather than letting Temporal burn the budget on a certainty.
     """
+
+    def __init__(self, message: str, *, retryable: bool) -> None:
+        super().__init__(message)
+        self.retryable = retryable

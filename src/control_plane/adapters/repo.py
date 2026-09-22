@@ -33,10 +33,14 @@ class GitError(RuntimeError):
 def _git_dir(repo_path: str | Path) -> str:
     """Absolute path to the repository's git directory.
 
-    Always absolute: git resolves a relative GIT_DIR against GIT_WORK_TREE when
-    both are set, so a relative path here silently points at the wrong place.
+    Two things this has to get right. It must be absolute, because git resolves
+    a relative GIT_DIR against GIT_WORK_TREE when both are set. And a **bare**
+    repository has no `.git` subdirectory - it *is* the git directory - which is
+    the shape every remote has.
     """
-    return str((Path(repo_path) / ".git").resolve())
+    base = Path(repo_path)
+    inner = base / ".git"
+    return str((inner if inner.exists() else base).resolve())
 
 
 def _git(
