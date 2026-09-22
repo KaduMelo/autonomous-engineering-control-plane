@@ -61,16 +61,16 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 > Write these first and watch them fail.
 
-- [ ] T011 [P] [US1] Unit test the exit-code contract in `tests/unit/test_exit_code_contract.py` — `0` → passed, `1` → not-passed, and `2`, `3`, `4`, `5`, `125`, `126`, `127`, `137` each raise `TestRunnerError` (SC-005)
-- [ ] T012 [P] [US1] Integration test isolation in `tests/integration/test_sandbox_isolation.py` — code inside the container cannot reach the network and cannot write outside the workspace mount (SC-004)
+- [X] T011 [P] [US1] Unit test the exit-code contract in `tests/unit/test_exit_code_contract.py` — `0` → passed, `1` → not-passed, and `2`, `3`, `4`, `5`, `125`, `126`, `127`, `137` each raise `TestRunnerError` (SC-005)
+- [X] T012 [P] [US1] Integration test isolation in `tests/integration/test_sandbox_isolation.py` — code inside the container cannot reach the network and cannot write outside the workspace mount (SC-004)
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement the sandbox invocation in `src/control_plane/adapters/sandbox.py` — `docker run --rm --network=none --read-only`, tmpfs `/tmp`, workspace bind mount, non-root user, memory/pids/cpu caps, no secret env; launched with `asyncio.create_subprocess_exec` under `asyncio.wait_for`, force-removing the container on timeout
-- [ ] T014 [US1] Implement the exit-code mapper in `src/control_plane/adapters/sandbox.py`, making T011 pass (depends on T013)
-- [ ] T015 [US1] Implement the `run_tests` activity in `src/control_plane/activities/test_runner.py` — build the workspace from a clean checkout of `(revision, patch)`, run the sandbox, emit `activity.heartbeat()` every 5s while the container runs (depends on T009, T014)
-- [ ] T016 [US1] Register `run_tests` in `src/control_plane/worker.py` with `start_to_close_timeout=600s` and `heartbeat_timeout=30s`, so the inner 300s container limit always fires first (depends on T010, T015)
-- [ ] T017 [US1] Integration test the activity end to end in `tests/integration/test_run_tests.py` — red seed returns not-passed, green returns passed, a hanging suite raises rather than blocking
+- [X] T013 [US1] Implement the sandbox invocation in `src/control_plane/adapters/sandbox.py` — `docker run --rm --network=none --read-only`, tmpfs `/tmp`, workspace bind mount, non-root user, memory/pids/cpu caps, no secret env; launched with `asyncio.create_subprocess_exec` under `asyncio.wait_for`, force-removing the container on timeout
+- [X] T014 [US1] Implement the exit-code mapper in `src/control_plane/adapters/sandbox.py`, making T011 pass (depends on T013)
+- [X] T015 [US1] Implement the `run_tests` activity in `src/control_plane/activities/test_runner.py` — build the workspace from a clean checkout of `(revision, patch)`, run the sandbox, emit `activity.heartbeat()` every 5s while the container runs (depends on T009, T014)
+- [X] T016 [US1] Register `run_tests` in `src/control_plane/worker.py` with `start_to_close_timeout=600s` and `heartbeat_timeout=30s`, so the inner 300s container limit always fires first (depends on T010, T015) — **note**: registration is in `worker.py`, but Temporal declares activity timeouts at the *call site*, so the two values live in `config.py` and are applied by the workflow's `execute_activity` (T028)
+- [X] T017 [US1] Integration test the activity end to end in `tests/integration/test_run_tests.py` — red seed returns not-passed, green returns passed, a hanging suite raises rather than blocking
 
 **Checkpoint**: The validator works standalone. Note it is *not* yet a demo of the feature's value — it is the foundation US2 and US3 both stand on.
 

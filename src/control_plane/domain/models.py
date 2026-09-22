@@ -72,6 +72,10 @@ class TestResult(_Frozen):
     A broken runner does not produce one of these - it raises TestRunnerError.
     """
 
+    # Not a test class. pytest collects anything named Test*, and would warn on
+    # every run while silently collecting nothing.
+    __test__ = False
+
     passed: bool
     output: str
     failing_tests: list[str] = Field(default_factory=list)
@@ -103,3 +107,40 @@ class RunOutcome(_Frozen):
     attempts: list[Attempt] = Field(default_factory=list)
     winning_change: ProposedChange | None = None
     branch: FixBranch | None = None
+
+
+# --- Activity inputs ---
+# These cross the boundary too, so they live here under the same two rules.
+# Note what is absent: no workspace path. `apply_patch` and `run_tests` each
+# take (revision, diff) and build their own workspace, which is what makes a
+# resume on a different worker behave identically to a first run.
+
+
+class RunTestsInput(_Frozen):
+    repo_path: str
+    revision: str
+    diff: str | None = None
+    attempt: int = 0  # 0 is the baseline run; heartbeat detail only
+
+
+class AnalyzeInput(_Frozen):
+    repo_path: str
+    revision: str
+    baseline: TestResult
+
+
+class ProposeInput(_Frozen):
+    context: RepositoryContext
+    history: list[Attempt] = Field(default_factory=list)
+
+
+class ApplyInput(_Frozen):
+    repo_path: str
+    revision: str
+    diff: str
+
+
+class BranchInput(_Frozen):
+    repo_path: str
+    revision: str
+    change: ProposedChange

@@ -10,6 +10,11 @@
 
 FROM python:3.12-slim
 
+# Nothing the container writes should outlive it: bytecode files would be owned
+# by the container uid in directories the host cannot clean up.
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 RUN pip install --no-cache-dir "pytest==8.3.4"
 
 # Non-root. The workspace is bind-mounted at /work and is the only writable path.
