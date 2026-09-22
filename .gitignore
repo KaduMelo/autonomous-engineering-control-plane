@@ -1,0 +1,59 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Test & type-check caches ---
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# --- Secrets & local config ---
+# The Anthropic credential lives here in local dev and must never be committed.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Per-user Claude Code permissions (the shared .claude/skills/ stays tracked)
+.claude/settings.local.json
+
+# --- Runtime scratch ---
+# Throwaway checkouts the sandbox builds per attempt. Keep this in sync with the
+# workspace root in src/control_plane/config.py.
+.workspaces/
+
+# Temporal dev server state, when started with --db-filename
+*.temporal.db
+temporal.db
+
+# --- Editors & OS ---
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Deliberately NOT ignored ---
+# uv.lock / poetry.lock  -> committed, the demo must be reproducible
+# tests/replay/histories/*.json -> committed, they ARE the determinism test fixtures
+# sandbox/Dockerfile -> committed, it is the isolation boundary
