@@ -8,6 +8,32 @@
 
 **Input**: PRD Phase 2 — "Trigger + PR (closes C)": ingress webhook (start-per-build, dedup) plus an idempotent `open_pr`. Completion milestone: **failed build → green pull request**. This phase closes the declared scope.
 
+## Clarifications
+
+### Session 2026-09-22
+
+- Q: With a webhook trigger there is no local path — how does the control plane obtain the
+  repository? → A: The notification carries a **repository URL plus a commit sha**, and the run
+  clones from it into a disposable workspace. This does not revoke feature 001's local-path
+  decision: a clone source may be a URL *or* a local path, so manual runs keep working through the
+  same single mechanism rather than a second code path.
+
+### Defaults taken without asking
+
+Recorded here so they are visible and correctable, rather than buried in the plan.
+
+- **A notification for a commit whose run already finished is refused**, and the ingress reports the
+  earlier outcome. One broken commit has one answer. Starting a second run would re-bill the model
+  for work already done and, when the first run ended `fixed`, would collide with the existing
+  branch and end `conflicted` anyway. This resolves the item the quality checklist left unchecked.
+- **Authenticity is verified with an HMAC signature over the request body**, compared in constant
+  time — what GitHub itself sends. Stateless, no external dependency, and the same verification
+  serves both a real delivery and a locally generated one.
+- **Tests and the default demo run fully offline**: a locally generated signed payload against a
+  bare repository acting as the remote. The demo script points at a real GitHub repository when one
+  is configured. Offline by default keeps the demo reproducible, which the constitution requires;
+  the real path is what proves the milestone end to end.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - A failed build starts a fix without anyone asking (Priority: P1)
@@ -59,7 +85,7 @@ observe exactly one run for that commit.
    processed, **Then** exactly one run exists for that commit.
 3. **Given** notifications for two different commits, **When** they arrive, **Then** two runs exist.
 4. **Given** a run for a commit has already finished, **When** a new notification for that same
-   commit arrives, **Then** the behavior is explicit and documented rather than accidental.
+   commit arrives, **Then** no second run starts and the ingress reports the earlier outcome.
 
 ---
 
@@ -119,8 +145,10 @@ is distinguishable from the ingress's own output.
 - **The sender retries a delivery it already made**: no second run, and the ingress reports success
   so the sender stops retrying.
 - **A notification arrives for a commit that no longer exists** (force-pushed, branch deleted): the
-  run starts and fails at the first step that needs the commit, with a clear reason. The ingress does
-  not try to validate repository state.
+  run starts and fails at the clone or checkout step, with a clear reason. The ingress does not try
+  to validate repository state before starting.
+- **The clone fails** (network, permissions, unknown host): an infrastructure error, retried. It is
+  never mistaken for a repository whose tests fail.
 - **A notification arrives while the engine is down**: the ingress reports a server error so the
   sender retries. It never acknowledges a build it did not start a run for.
 - **The remote rejects the branch push** (permissions, protected refs): an error, retried; the
@@ -141,11 +169,16 @@ is distinguishable from the ingress's own output.
 - **FR-002**: The ingress MUST verify the authenticity of each notification before acting on it, and
   MUST reject unverifiable ones without starting a run.
 - **FR-003**: The ingress MUST start a fix run only for notifications that describe a **failed**
-  build carrying a commit identifier and a repository identifier.
+  build carrying a commit sha and a repository URL.
+- **FR-003a**: The system MUST obtain the repository by cloning the given source into a disposable
+  workspace at the start of a run. A clone source MAY be a URL or a local path, so manually started
+  runs and webhook-started runs share one mechanism.
 - **FR-004**: The ingress MUST derive the run's identity from the commit, so that the durable
   execution engine itself rejects a second concurrent run for that commit.
 - **FR-005**: A duplicate notification MUST be reported to the sender as success, not as an error —
   it describes a build the system is already handling.
+- **FR-005a**: A notification for a commit whose run has already finished MUST NOT start a second
+  run. The ingress MUST report the earlier outcome instead.
 - **FR-006**: The ingress MUST respond to the sender promptly, without waiting for the fix run to
   finish.
 - **FR-007**: The ingress MUST report a server error, rather than acknowledging, when it cannot start
@@ -187,6 +220,8 @@ is distinguishable from the ingress's own output.
 - **SC-002**: Sending the same notification ten times, concurrently, produces exactly one run.
 - **SC-003**: 100% of notifications that are unverifiable, malformed, or describe a successful build
   result in no run.
+- **SC-003a**: A notification for an already-completed commit starts zero new runs and bills the
+  model zero times, verified by an automated test.
 - **SC-004**: Executing the publish-and-open step twice for the same fix produces exactly one pull
   request, verified by an automated test.
 - **SC-005**: Zero pull requests are opened for runs that ended as exhausted or conflicted.
@@ -201,7 +236,7 @@ is distinguishable from the ingress's own output.
 ## Assumptions
 
 - The target repository is hosted on GitHub and the control plane has a token with permission to
-  push a branch and open a pull request on it. Other hosts are out of scope for this feature.
+  clone it, push a branch, and open a pull request on it. Other hosts are out of scope.
 - The CI platform can send an authenticated HTTP notification on build completion. The seed setup
   stands in for a real CI installation.
 - Feature 001 is merged: the durable loop, the sandbox, and the deterministic `fix/<sha>` branch

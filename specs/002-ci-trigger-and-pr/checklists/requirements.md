@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -31,11 +31,12 @@
 
 ## Notes
 
-- **One item is deliberately unchecked.** US2 scenario 4 and the matching edge case say the
-  behavior for a notification arriving *after* a run for that commit already finished must be
-  "explicit and documented" — which is a decision that has not been made, not a requirement. It is
-  the first thing `/speckit-clarify` should resolve, and this checklist stays honest about it rather
-  than marking the spec complete.
+- **Resolved in clarification (2026-09-22)**: US2 scenario 4 previously said the post-completion
+  behavior must be "explicit and documented", which was a decision, not a requirement. It is now
+  FR-005a and SC-003a — refuse, and report the earlier outcome. 16/16 items pass.
+- **Repository acquisition changed shape.** The notification carries a URL plus a sha and the run
+  clones. Feature 001's local-path decision is not revoked: a clone source may be a URL or a local
+  path, so both entry points share one mechanism (FR-003a) rather than growing a second code path.
 - **GitHub named in Assumptions**: named as a property of the environment the feature integrates
   with, the same way Python was named for feature 001's seed repository. The FRs stay host-agnostic
   ("the repository's remote", "the repository host").
