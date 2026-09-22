@@ -106,6 +106,10 @@ We apply **hexagonal** architecture with restraint: we keep the seams (the port 
 | **Full set of hexagonal adapters** | Only the seams we need. Full ceremony would slow down the skeleton. |
 | **HTTP API / frontend** | The entry point is the ingress webhook + the approval endpoint. Nothing more. |
 | **Multi-repo watcher** | We choose *start-per-build* (see trade-offs). |
+| **OpenTelemetry spans per activity** | The Temporal event history is already the system of record, and §6 says so. A second telemetry path adds a dependency without adding a guarantee the history does not already give. |
+| **A second LLM provider adapter** | The port is the demonstration. Building a second adapter behind it proves nothing the port does not already prove, and doubles the surface to test. |
+| **Status query handler** | The Temporal Web UI already answers "what is this run doing". A query handler would be a second read path over state the history already holds. |
+| **Logging to an external channel on exhaustion** | The `exhausted` outcome is already explicit in the run record. Shipping it elsewhere is integration plumbing, not mechanism. |
 
 ### Conscious trade-offs
 
@@ -118,7 +122,11 @@ We apply **hexagonal** architecture with restraint: we keep the seams (the port 
 
 ## 5. Functional Requirements
 
-Priority: **MUST** (no POC without it) · **SHOULD** (production shape) · **COULD** (v2).
+Priority: **MUST** (no POC without it) · **SHOULD** (production shape).
+
+> There is no COULD tier. The items that used to sit there - status query and
+> external-channel logging - were cut with Phase 3 and are recorded in the
+> negative scope in §4, with the reason.
 
 | # | User Story | Prio |
 |---|---|---|
@@ -130,8 +138,6 @@ Priority: **MUST** (no POC without it) · **SHOULD** (production shape) · **COU
 | US6 | As the control plane, I want an interrupted run to resume from the saved point, so that an infra failure does not restart the work or pay for the same LLM calls again. | **MUST** |
 | US7 | As a reviewer, I want to approve (or reject) the fix before the PR, with SLA escalation, so that there is human governance. | **SHOULD** |
 | US8 | As the agent, I want to open an idempotent PR at the end, so that a retry does not create duplicate PRs. | **SHOULD** |
-| US9 | As an operator, I want to query the status of a running job, so that I have observability without touching its state. | **COULD** |
-| US10 | As the control plane, I want to log to an external channel when the agent runs out of attempts, for later triage. | **COULD** |
 
 ---
 
@@ -157,7 +163,7 @@ Priority: **MUST** (no POC without it) · **SHOULD** (production shape) · **COU
 - **Isolation:** LLM-generated code never runs on the control plane host — a disposable container, an isolated filesystem, and a timeout.
 - **Idempotency:** every activity with a side effect (`apply_patch`, `open_pr`) is safe to re-run.
 - **Determinism:** workflow code has no I/O; activity imports go through `imports_passed_through`.
-- **Observability:** the Temporal event history is the source of truth; **[TBD]** OpenTelemetry spans per activity.
+- **Observability:** the Temporal event history is the source of truth. OpenTelemetry spans are **out of scope** (§4) - the history already answers what happened, and a second telemetry path would add a dependency without adding a guarantee.
 - **Performance:** latency is dominated by the LLM + the test suite; all timeouts are explicit (start-to-close + heartbeat). There is no latency SLA for the POC.
 - **Security:** LLM/GitHub credentials stay out of the workflow (only in activities), with a minimum-scope token. LGPD **[N/A — local POC, no personal data]**.
 
@@ -206,14 +212,17 @@ Format: **GIVEN / WHEN / THEN** (pass/fail).
 
 ## 10. Timeline and Dependencies
 
-Phases (rough effort; incremental delivery inside the C scope):
+Phases (rough effort; incremental delivery inside the C scope). Three phases, and
+Phase 2 closes the scope — there is no optional fourth. A "depth" phase holding
+OTel, LangGraph, MCP, multi-provider adapters and a status query was cut: it
+contradicted §4, which already rejected LangGraph and MCP, and it was the shape
+the over-scope risk in §9 takes in practice.
 
 | Phase | Scope | Completion milestone | Effort |
 |---|---|---|---|
 | **0 — Durable loop** | `analyze_repo` + the propose→apply→`run_tests` loop (isolated) + resume. No gate, no PR. | Red repo → green end-to-end; **worker kill → resume** works | ~2–4 days |
 | **1 — Governance** | Approval signal + SLA timer + `report_failure` | Human gate works; SLA fires | +days |
 | **2 — Trigger + PR (closes C)** | Ingress webhook (start-per-build, dedup) + idempotent `open_pr` | **Failed build → green PR** | +days |
-| **3 — Depth (COULD)** | OTel spans, internal LangGraph, MCP, multi-provider via port, status query | Optional / v2 | **[TBD]** |
 
 **Implementation order (inside Phase 0):** `run_tests` (the objective feedback is the foundation of everything) → `propose_fix` → `apply_patch` → the end-to-end loop without the gate.
 
