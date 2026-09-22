@@ -50,7 +50,7 @@ BEFORE_BRANCH="$(git -C "$SEED_DIR" rev-parse --abbrev-ref HEAD)"
 echo "    on $BEFORE_BRANCH at ${BEFORE_HEAD:0:12}"
 
 echo "==> starting the run (max_attempts=$MAX_ATTEMPTS)"
-"$PY" -m control_plane.cli run --repo "$SEED_DIR" --sha "$SHA" --max-attempts "$MAX_ATTEMPTS"
+"$PY" -m control_plane.cli run --repo "$SEED_DIR" --sha "$SHA" --max-attempts "$MAX_ATTEMPTS" --force
 RUN_STATUS=$?
 
 echo

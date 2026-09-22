@@ -52,15 +52,15 @@ Single Python project, extending feature 001. New code under `src/control_plane/
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Unit test signature verification in `tests/unit/test_signature.py` — valid, missing, malformed, wrong-secret and tampered-body cases, and that comparison is constant-time (`hmac.compare_digest`)
-- [ ] T011 [P] [US1] Unit test payload parsing in `tests/unit/test_notification.py` — required fields, a successful build, and that parsing is never attempted before verification
-- [ ] T012 [P] [US1] Integration test the ingress in `tests/integration/test_ingress.py` — 202 started, 400 malformed, 401 unsigned, 200 not-a-failure, 503 when the engine is unreachable, and that the response arrives without waiting for the run (SC-003, SC-007)
+- [X] T010 [P] [US1] Unit test signature verification in `tests/unit/test_signature.py` — valid, missing, malformed, wrong-secret and tampered-body cases, and that comparison is constant-time (`hmac.compare_digest`)
+- [X] T011 [P] [US1] Unit test payload parsing in `tests/unit/test_notification.py` — required fields, a successful build, and that parsing is never attempted before verification
+- [X] T012 [P] [US1] Integration test the ingress in `tests/integration/test_ingress.py` — 202 started, 400 malformed, 401 unsigned, 200 not-a-failure, 503 when the engine is unreachable, and that the response arrives without waiting for the run (SC-003, SC-007)
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement constant-time HMAC verification in `src/control_plane/ingress/signature.py` (depends on T002)
-- [ ] T014 [US1] Implement the Starlette app in `src/control_plane/ingress/app.py` — read the body as bytes, verify, then parse; start the workflow; return per [contracts/ingress.md](./contracts/ingress.md) (depends on T004, T013)
-- [ ] T015 [US1] Add the entrypoint in `src/control_plane/ingress/__main__.py` so `python -m control_plane.ingress` serves the app with uvicorn (depends on T014)
+- [X] T013 [US1] Implement constant-time HMAC verification in `src/control_plane/ingress/signature.py` (depends on T002)
+- [X] T014 [US1] Implement the Starlette app in `src/control_plane/ingress/app.py` — read the body as bytes, verify, then parse; start the workflow; return per [contracts/ingress.md](./contracts/ingress.md) (depends on T004, T013)
+- [X] T015 [US1] Add the entrypoint in `src/control_plane/ingress/__main__.py` so `python -m control_plane.ingress` serves the app with uvicorn (depends on T014)
 
 **Checkpoint**: a notification starts a run. Nothing is deduplicated yet.
 
@@ -74,14 +74,14 @@ Single Python project, extending feature 001. New code under `src/control_plane/
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Integration test concurrent duplicates in `tests/integration/test_ingress_dedup.py` — ten simultaneous posts yield one 202 and nine 200s, and exactly one run (SC-002)
-- [ ] T017 [P] [US2] Integration test post-completion duplicates in `tests/integration/test_ingress_dedup.py` — a notification for a finished commit starts zero runs and bills the fixer zero times (SC-003a)
+- [X] T016 [P] [US2] Integration test concurrent duplicates in `tests/integration/test_ingress_dedup.py` — ten simultaneous posts yield one 202 and nine 200s, and exactly one run (SC-002)
+- [X] T017 [P] [US2] Integration test post-completion duplicates in `tests/integration/test_ingress_dedup.py` — a notification for a finished commit starts zero runs and bills the fixer zero times (SC-003a)
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Start workflows with `id_reuse_policy=WorkflowIDReusePolicy.REJECT_DUPLICATE` in `src/control_plane/ingress/app.py`, so the engine refuses a second run for a commit in any state (depends on T014)
-- [ ] T019 [US2] Handle `WorkflowAlreadyStartedError` in `src/control_plane/ingress/app.py` — fetch the existing run's status and answer 200 `deduplicated` with it, never an error (depends on T018)
-- [ ] T020 [US2] Apply the same reuse policy in `src/control_plane/cli.py`, so a manual run and a webhook run cannot disagree about whether a commit already has an answer (depends on T018)
+- [X] T018 [US2] Start workflows with `id_reuse_policy=WorkflowIDReusePolicy.REJECT_DUPLICATE` in `src/control_plane/ingress/app.py`, so the engine refuses a second run for a commit in any state (depends on T014)
+- [X] T019 [US2] Handle `WorkflowAlreadyStartedError` in `src/control_plane/ingress/app.py` — fetch the existing run's status and answer 200 `deduplicated` with it, never an error (depends on T018)
+- [X] T020 [US2] Apply the same reuse policy in `src/control_plane/cli.py`, so a manual run and a webhook run cannot disagree about whether a commit already has an answer (depends on T018) — **done, with an addition**: applying it plainly would have broken `demo.sh`, which re-runs the same revision. The CLI keeps `REJECT_DUPLICATE` as the default and adds `--force` (`TERMINATE_IF_RUNNING`) for an operator who genuinely means to re-run. Safe by default, override visible; both demo scripts pass `--force`.
 
 **Checkpoint**: one commit, one run, whatever the sender does.
 

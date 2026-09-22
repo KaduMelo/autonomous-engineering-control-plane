@@ -13,6 +13,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from temporalio.common import WorkflowIDReusePolicy
+
 from control_plane import config
 from control_plane.domain.models import FixRequest, RunOutcome
 from control_plane.worker import connect
@@ -30,15 +32,35 @@ def _resolve_revision(repo_path: str, revision: str) -> str:
     return proc.stdout.strip()
 
 
-async def _run(repo_path: str, revision: str, max_attempts: int, as_json: bool) -> int:
+async def _run(
+    repo_path: str,
+    revision: str,
+    max_attempts: int,
+    as_json: bool,
+    full_name: str | None = None,
+    force: bool = False,
+) -> int:
     client = await connect()
     workflow_id = f"fix-{revision}"
 
     handle = await client.start_workflow(
         FixWorkflow.run,
-        FixRequest(repo_path=repo_path, revision=revision, max_attempts=max_attempts),
+        FixRequest(
+            repo_path=repo_path,
+            revision=revision,
+            max_attempts=max_attempts,
+            repository_full_name=full_name,
+        ),
         id=workflow_id,
         task_queue=config.TASK_QUEUE,
+        # Same guarantee the ingress relies on: one commit, one answer. An
+        # operator who genuinely means to re-run says so with --force, which
+        # keeps the safe behaviour the default and makes the override visible.
+        id_reuse_policy=(
+            WorkflowIDReusePolicy.TERMINATE_IF_RUNNING
+            if force
+            else WorkflowIDReusePolicy.REJECT_DUPLICATE
+        ),
     )
     # Printed before the result so tooling can scope to *this* run: the workflow
     # id is stable by design, so it alone points at whichever run was latest.
@@ -75,11 +97,32 @@ def main() -> None:
     run.add_argument("--sha", default="HEAD", help="revision to fix (default: HEAD)")
     run.add_argument("--max-attempts", type=int, default=config.DEFAULT_MAX_ATTEMPTS)
     run.add_argument("--json", action="store_true", help="print the outcome as JSON")
+    run.add_argument(
+        "--repo-full-name",
+        default=None,
+        help="owner/name on the repository host; opens a pull request when given",
+    )
+    run.add_argument(
+        "--force",
+        action="store_true",
+        help="re-run a commit that already has an answer (terminates any run in flight)",
+    )
 
     args = parser.parse_args()
     repo_path = str(Path(args.repo).resolve())
     revision = _resolve_revision(repo_path, args.sha)
-    raise SystemExit(asyncio.run(_run(repo_path, revision, args.max_attempts, args.json)))
+    raise SystemExit(
+        asyncio.run(
+            _run(
+                repo_path,
+                revision,
+                args.max_attempts,
+                args.json,
+                args.repo_full_name,
+                args.force,
+            )
+        )
+    )
 
 
 if __name__ == "__main__":
