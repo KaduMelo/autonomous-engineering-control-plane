@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FixProposal",
+  "description": "The structured output the fix proposer must return. Enforced via output_config.format so the response is validated rather than parsed out of prose.",
+  "type": "object",
+  "properties": {
+    "diff": {
+      "type": "string",
+      "description": "A unified diff against the target revision, applicable with a standard patch tool from a clean checkout. May touch any path, including tests."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why this change is expected to make the failing tests pass. Preserved in the run record so a human can tell a genuine fix from a weakened test.",
+      "maxLength": 2000
+    },
+    "files_touched": {
+      "type": "array",
+      "description": "Repository-relative paths the diff modifies. Redundant with the diff on purpose: a mismatch is a cheap signal that the diff is malformed.",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  },
+  "required": ["diff", "rationale", "files_touched"],
+  "additionalProperties": false
+}
