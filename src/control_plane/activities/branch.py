@@ -27,9 +27,10 @@ async def create_fix_branch(request: BranchInput) -> FixBranch:
     if tree is None:
         raise ValueError("the change has no tree hash - apply_patch must run first")
 
-    existing = repo.resolve(request.repo_path, name)
+    source = repo.resolve_source(request.repo_path)
+    existing = repo.resolve(source, name)
     if existing is not None:
-        if repo.tree_of(request.repo_path, existing) == tree:
+        if repo.tree_of(source, existing) == tree:
             return FixBranch(name=name, commit=existing, created=False)
         raise BranchConflictError(
             f"{name} already exists carrying different content ({existing[:12]}); "
@@ -37,10 +38,10 @@ async def create_fix_branch(request: BranchInput) -> FixBranch:
         )
 
     commit = repo.commit_tree(
-        request.repo_path,
+        source,
         tree,
         request.revision,
         f"fix: automated fix for {request.revision[:12]}\n\n{request.change.rationale}".strip(),
     )
-    repo.update_ref(request.repo_path, f"refs/heads/{name}", commit)
+    repo.update_ref(source, f"refs/heads/{name}", commit)
     return FixBranch(name=name, commit=commit, created=True)

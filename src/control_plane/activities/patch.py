@@ -23,12 +23,13 @@ async def apply_patch(request: ApplyInput) -> ProposedChange:
     """Raises PatchApplyError when the diff is malformed or does not apply."""
     workspace = Path(tempfile.mkdtemp(prefix="apply-"))
     try:
-        repo.materialize(request.repo_path, request.revision, workspace)
+        source = repo.resolve_source(request.repo_path)
+        repo.materialize(source, request.revision, workspace)
         repo.apply_diff(workspace, request.diff)
         return ProposedChange(
             diff=request.diff,
             rationale="",
-            tree_hash=repo.tree_hash(request.repo_path, workspace),
+            tree_hash=repo.tree_hash(source, workspace),
         )
     finally:
         shutil.rmtree(workspace, ignore_errors=True)

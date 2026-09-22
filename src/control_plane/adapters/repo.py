@@ -16,13 +16,14 @@ until the ref points at them, and collected by `git gc` like any other.
 
 from __future__ import annotations
 
+import hashlib
 import subprocess
 import tarfile
 import tempfile
 from io import BytesIO
 from pathlib import Path
 
-from control_plane.domain.errors import PatchApplyError
+from control_plane.domain.errors import CloneError, PatchApplyError
 
 
 class GitError(RuntimeError):
@@ -161,3 +162,80 @@ def head_state(repo_path: str | Path) -> tuple[str, str, str]:
         capture_output=True,
     ).stdout.decode()
     return head, symbolic, status
+
+
+# --- Feature 002: obtaining a repository from a URL ---
+
+
+def cache_dir_for(source: str) -> Path:
+    """Deterministic clone directory for `source`.
+
+    Keyed by a hash of the source rather than by its last path segment, so two
+    repositories that share a name cannot collide. The key is a pure function of
+    the input, which is what lets any activity re-derive the directory instead of
+    being handed a path.
+    """
+    from control_plane import config
+
+    digest = hashlib.sha256(source.encode()).hexdigest()[:16]
+    return config.clone_cache_root() / digest
+
+
+def clone_or_fetch(source: str, dest: Path) -> None:
+    """Ensure `dest` is a clone of `source` and is up to date.
+
+    Miss clones, hit fetches. A hit must still fetch: a cache that never updated
+    would serve a stale repository forever, and the revision being asked about is
+    usually newer than the last time this ran.
+    """
+    dest.parent.mkdir(parents=True, exist_ok=True)
+
+    if (dest / ".git").is_dir():
+        proc = subprocess.run(
+            ["git", "-C", str(dest), "fetch", "--quiet", "--prune", "--tags", "origin"],
+            capture_output=True,
+        )
+    else:
+        proc = subprocess.run(["git", "clone", "--quiet", source, str(dest)], capture_output=True)
+
+    if proc.returncode != 0:
+        raise CloneError(
+            f"could not obtain {source}: {proc.stderr.decode('utf-8', 'replace').strip()}"
+        )
+
+
+def push_ref(repo_path: str | Path, remote: str, ref: str) -> None:
+    """Push a single ref to `remote`.
+
+    Explicit `src:dst` rather than a bare ref name: a bare name is resolved
+    against the remote's configuration, and this must put the ref exactly where
+    the pull request will look for it.
+    """
+    _git(repo_path, "push", remote, f"refs/heads/{ref}:refs/heads/{ref}")
+
+
+def set_remote(repo_path: str | Path, remote: str, url: str) -> None:
+    """Point `remote` at `url`, adding it if it is not there."""
+    existing = _git(repo_path, "remote", check=False).stdout.decode().split()
+    if remote in existing:
+        _git(repo_path, "remote", "set-url", remote, url)
+    else:
+        _git(repo_path, "remote", "add", remote, url)
+
+
+def resolve_source(source: str) -> Path:
+    """The local repository a run should operate on.
+
+    A local path that is already a git repository *is* the repository - it is not
+    copied into the cache. Anything else is a remote and resolves to its clone.
+
+    This is a deliberate deviation from the spec's wording, which said one
+    mechanism with no second code path. Cloning a local path would work, but the
+    fix branch would then land in a cache directory the operator never looks at,
+    which is precisely what feature 001's demo shows them. One entry point with a
+    local fast path was the honest shape; two entry points would not have been.
+    """
+    candidate = Path(source)
+    if candidate.is_dir() and (candidate / ".git").exists():
+        return candidate
+    return cache_dir_for(source)
