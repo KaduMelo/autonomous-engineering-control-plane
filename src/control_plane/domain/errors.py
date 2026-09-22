@@ -38,3 +38,20 @@ class BranchConflictError(ControlPlaneError):
     Not retryable, and deliberately not overwritten: a control plane that
     silently replaces a previous result is the failure this guards against.
     """
+
+
+class CloneError(ControlPlaneError):
+    """The repository could not be cloned or fetched.
+
+    Retryable: network, transient auth, or a host that was briefly unreachable.
+    A revision that is missing *after* a successful clone is a different thing -
+    a force-push will not undo itself - and is raised as non-retryable instead.
+    """
+
+
+class HostApiError(ControlPlaneError):
+    """The repository host refused or failed.
+
+    Retryable only for 5xx and rate limits. A bad credential or a missing
+    repository is raised as non-retryable: three more attempts will not help.
+    """

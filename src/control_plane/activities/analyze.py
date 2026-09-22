@@ -45,7 +45,8 @@ def _local_modules(source: str, roots: list[Path], workspace: Path) -> set[Path]
 @activity.defn
 async def analyze_repo(request: AnalyzeInput) -> RepositoryContext:
     """Collect the failing test files and the modules they import."""
-    if repo.resolve(request.repo_path, request.revision) is None:
+    source = repo.resolve_source(request.repo_path)
+    if repo.resolve(source, request.revision) is None:
         # Retrying cannot conjure a commit that is not there.
         raise ApplicationError(
             f"revision {request.revision} does not exist in {request.repo_path}",
@@ -55,7 +56,7 @@ async def analyze_repo(request: AnalyzeInput) -> RepositoryContext:
 
     workspace = Path(tempfile.mkdtemp(prefix="analyze-"))
     try:
-        repo.materialize(request.repo_path, request.revision, workspace)
+        repo.materialize(source, request.revision, workspace)
         roots = [workspace, workspace / "src", workspace / "tests"]
 
         wanted: list[Path] = []

@@ -97,3 +97,44 @@ def retry_policy() -> RetryPolicy:
         maximum_attempts=RETRY_MAXIMUM_ATTEMPTS,
         non_retryable_error_types=list(NON_RETRYABLE_ERROR_TYPES),
     )
+
+
+# --- Ingress (feature 002) ---
+INGRESS_HOST = os.environ.get("CONTROL_PLANE_INGRESS_HOST", "127.0.0.1")
+INGRESS_PORT = int(os.environ.get("CONTROL_PLANE_INGRESS_PORT", "8080"))
+# Shared secret for the HMAC over the raw request body. Read at call time so a
+# test can set it; see workspace_root() for why import-time binding is a trap.
+WEBHOOK_SECRET_ENV = "CONTROL_PLANE_WEBHOOK_SECRET"
+
+
+def webhook_secret() -> bytes:
+    secret = os.environ.get(WEBHOOK_SECRET_ENV, "")
+    return secret.encode()
+
+
+# --- Repository host (feature 002) ---
+# Points at the local stand-in by default. Nothing else about the adapter
+# changes between offline and a real host.
+HOST_API_BASE_URL = os.environ.get("CONTROL_PLANE_HOST_API", "http://127.0.0.1:8099")
+HOST_TOKEN_ENV = "CONTROL_PLANE_HOST_TOKEN"
+
+
+def host_token() -> str:
+    return os.environ.get(HOST_TOKEN_ENV, "offline-stand-in-token")
+
+
+def clone_cache_root() -> Path:
+    """Where clones are cached, keyed by source.
+
+    A function for the same reason as workspace_root(): resolving a path touches
+    the filesystem, and this module is imported by workflow code.
+    """
+    override = os.environ.get("CONTROL_PLANE_CLONE_ROOT")
+    if override:
+        return Path(override)
+    return Path(__file__).resolve().parents[2] / ".workspaces" / "clones"
+
+
+CLONE_TIMEOUT = timedelta(seconds=300)
+CLONE_HEARTBEAT = timedelta(seconds=30)
+OPEN_PR_TIMEOUT = timedelta(seconds=120)

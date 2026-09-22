@@ -107,6 +107,8 @@ class RunOutcome(_Frozen):
     attempts: list[Attempt] = Field(default_factory=list)
     winning_change: ProposedChange | None = None
     branch: FixBranch | None = None
+    # Set only when status == "fixed"; exhausted and conflicted runs open none.
+    pull_request: PullRequestRef | None = None
 
 
 # --- Activity inputs ---
@@ -144,3 +146,67 @@ class BranchInput(_Frozen):
     repo_path: str
     revision: str
     change: ProposedChange
+
+
+# --- Feature 002: trigger and pull request ---
+
+
+class BuildNotification(_Frozen):
+    """What the CI platform posts. Parsed only after its signature verifies."""
+
+    repository_url: str
+    repository_full_name: str
+    revision: str
+    conclusion: str
+
+    @property
+    def failed(self) -> bool:
+        return self.conclusion == "failure"
+
+
+IngressDecision = Literal["started", "deduplicated", "rejected", "failed"]
+
+
+class IngressOutcome(_Frozen):
+    """What the ingress decided.
+
+    This exists because a rejected notification leaves no trace anywhere else -
+    no run starts, so the event history has nothing to say about it.
+    """
+
+    decision: IngressDecision
+    revision: str | None = None
+    reason: str | None = None
+    workflow_id: str | None = None
+    previous_status: str | None = None
+
+
+class PullRequestRef(_Frozen):
+    """The published result. `created` is False when one already existed."""
+
+    number: int
+    url: str
+    created: bool
+
+
+class CloneInput(_Frozen):
+    source: str
+    revision: str
+
+
+class OpenPullRequestInput(_Frozen):
+    """Carries a summary rather than the whole RunOutcome.
+
+    The body needs the failing tests, the winning diff and the attempt count.
+    Sending an unbounded run record through the payload would push against the
+    history's size limits for nothing.
+    """
+
+    source: str
+    repository_full_name: str
+    revision: str
+    branch: str
+    failing_tests: list[str] = Field(default_factory=list)
+    winning_diff: str = ""
+    rationale: str = ""
+    attempts: int = 0

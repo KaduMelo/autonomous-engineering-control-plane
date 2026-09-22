@@ -23,9 +23,9 @@ Single Python project, extending feature 001. New code under `src/control_plane/
 
 ## Phase 1: Setup
 
-- [ ] T001 Add `starlette`, `uvicorn` and an explicit `httpx2` pin to `pyproject.toml`, and note in a comment that `httpx2` is declared rather than added — it already arrives via `anthropic`, and `httpx` would be a second HTTP stack
-- [ ] T002 [P] Extend `src/control_plane/config.py` — webhook secret env var, ingress host/port, host API base URL and token env var, clone cache root, and the new timeouts (`CLONE_TIMEOUT`, `CLONE_HEARTBEAT`, `OPEN_PR_TIMEOUT`)
-- [ ] T003 [P] Add a `bare_remote` pytest fixture in `tests/integration/conftest.py` that creates a bare clone of the seed repository to act as the remote
+- [X] T001 Add `starlette`, `uvicorn` and an explicit `httpx2` pin to `pyproject.toml`, and note in a comment that `httpx2` is declared rather than added — it already arrives via `anthropic`, and `httpx` would be a second HTTP stack
+- [X] T002 [P] Extend `src/control_plane/config.py` — webhook secret env var, ingress host/port, host API base URL and token env var, clone cache root, and the new timeouts (`CLONE_TIMEOUT`, `CLONE_HEARTBEAT`, `OPEN_PR_TIMEOUT`)
+- [X] T003 [P] Add a `bare_remote` pytest fixture in `tests/integration/conftest.py` that creates a bare clone of the seed repository to act as the remote
 
 ---
 
@@ -33,12 +33,12 @@ Single Python project, extending feature 001. New code under `src/control_plane/
 
 **⚠️ CRITICAL**: Every user story depends on this phase.
 
-- [ ] T004 [P] Add the new domain models in `src/control_plane/domain/models.py` — `BuildNotification`, `IngressOutcome`, `PullRequestRef`, `CloneInput`, `OpenPullRequestInput`; extend `RunOutcome` with `pull_request`
-- [ ] T005 [P] Add `CloneError` and `HostApiError` in `src/control_plane/domain/errors.py`
-- [ ] T006 Extend `src/control_plane/adapters/repo.py` with `clone_or_fetch(source, dest)`, `push_ref(repo_path, remote, ref)` and `cache_dir_for(source)` — the deterministic directory derived from the source (depends on T005)
-- [ ] T007 Implement the `ensure_clone` activity in `src/control_plane/activities/clone.py` — pure function of `(source, revision)`, returns the cache key and never a path, heartbeats while cloning (depends on T006)
-- [ ] T008 **Refactor feature 001's activities to resolve the repository through `ensure_clone`** in `analyze.py`, `patch.py`, `test_runner.py` and `branch.py`, so a URL source works everywhere a local path did. Feature 001's tests must still pass unchanged (depends on T007)
-- [ ] T009 [P] Unit test the clone cache in `tests/unit/test_clone_cache.py` — the directory is a deterministic function of the source, a miss clones, a hit fetches, and deleting the directory converges again
+- [X] T004 [P] Add the new domain models in `src/control_plane/domain/models.py` — `BuildNotification`, `IngressOutcome`, `PullRequestRef`, `CloneInput`, `OpenPullRequestInput`; extend `RunOutcome` with `pull_request`
+- [X] T005 [P] Add `CloneError` and `HostApiError` in `src/control_plane/domain/errors.py`
+- [X] T006 Extend `src/control_plane/adapters/repo.py` with `clone_or_fetch(source, dest)`, `push_ref(repo_path, remote, ref)` and `cache_dir_for(source)` — the deterministic directory derived from the source (depends on T005)
+- [X] T007 Implement the `ensure_clone` activity in `src/control_plane/activities/clone.py` — pure function of `(source, revision)`, returns the cache key and never a path, heartbeats while cloning (depends on T006)
+- [X] T008 **Refactor feature 001's activities to resolve the repository through `ensure_clone`** in `analyze.py`, `patch.py`, `test_runner.py` and `branch.py`, so a URL source works everywhere a local path did. Feature 001's tests must still pass unchanged (depends on T007) — **done, with a deviation**: `resolve_source()` treats a *working* repository as the repository itself and does not copy it; only a bare or remote source resolves to the clone cache. Cloning a local path would have put the fix branch in a cache directory the operator never looks at, which is exactly what feature 001's demo shows them. All 001 tests pass unchanged.
+- [X] T009 [P] Unit test the clone cache in `tests/unit/test_clone_cache.py` — the directory is a deterministic function of the source, a miss clones, a hit fetches, and deleting the directory converges again
 
 **Checkpoint**: a run can be driven from a URL. US1 and US3 can now proceed in parallel.
 

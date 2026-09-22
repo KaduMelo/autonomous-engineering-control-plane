@@ -57,3 +57,18 @@ def fix_diff() -> str:
 def other_diff() -> str:
     """A different, also-correct fix - used to provoke a branch conflict."""
     return _OTHER_DIFF
+
+
+@pytest.fixture
+def bare_remote(tmp_path: Path, seed_repo: tuple[str, str]) -> str:
+    """A bare clone of the seed, standing in for the hosted remote.
+
+    Bare because a push to a checked-out branch of a non-bare repository is
+    refused - which is a real constraint, not a test artifact.
+    """
+    repo_path, _ = seed_repo
+    dest = tmp_path / "remote.git"
+    subprocess.run(
+        ["git", "clone", "--bare", repo_path, str(dest)], check=True, capture_output=True
+    )
+    return str(dest)

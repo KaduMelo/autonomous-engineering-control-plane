@@ -41,7 +41,7 @@ async def run_tests(request: RunTestsInput) -> TestResult:
 
     beat: asyncio.Task[None] | None = None
     try:
-        repo.materialize(request.repo_path, request.revision, workspace)
+        repo.materialize(repo.resolve_source(request.repo_path), request.revision, workspace)
         if request.diff is not None:
             repo.apply_diff(workspace, request.diff)
 

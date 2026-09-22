@@ -11,6 +11,15 @@ dependencies = [
     "temporalio>=1.7",
     "anthropic>=0.40",
     "pydantic>=2.9",
+    # The ingress must be async: it calls the Temporal client and must return
+    # before the run finishes. Starlette rather than FastAPI - the latter's
+    # differentiators (auto docs, DI, path params) are unused for one route, and
+    # pydantic already covers validation.
+    "starlette>=0.41",
+    "uvicorn>=0.32",
+    # Declared, not added: anthropic already installs it. Depending on httpx
+    # instead would mean a second, parallel HTTP stack in the same process.
+    "httpx2>=0.28",
 ]
 
 [project.optional-dependencies]
