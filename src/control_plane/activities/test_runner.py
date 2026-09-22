@@ -35,8 +35,9 @@ async def run_tests(request: RunTestsInput) -> TestResult:
     Returns a TestResult for a passing or failing suite. Raises TestRunnerError
     for anything else - see adapters.sandbox.verdict for the exit-code table.
     """
-    config.WORKSPACE_ROOT.mkdir(parents=True, exist_ok=True)
-    workspace = Path(tempfile.mkdtemp(prefix="run-", dir=config.WORKSPACE_ROOT))
+    root = config.workspace_root()
+    root.mkdir(parents=True, exist_ok=True)
+    workspace = Path(tempfile.mkdtemp(prefix="run-", dir=root))
 
     beat: asyncio.Task[None] | None = None
     try:

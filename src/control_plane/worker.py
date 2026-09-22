@@ -11,7 +11,6 @@ import asyncio
 import logging
 
 from temporalio.client import Client
-from temporalio.common import RetryPolicy
 from temporalio.contrib.pydantic import pydantic_data_converter
 from temporalio.worker import Worker
 
@@ -25,22 +24,6 @@ async def connect() -> Client:
     return await Client.connect(
         config.TEMPORAL_TARGET,
         data_converter=pydantic_data_converter,
-    )
-
-
-def default_retry_policy() -> RetryPolicy:
-    """Backoff for transient failures.
-
-    `non_retryable_error_types` is the important part: a diff that does not
-    apply and a branch that already carries different content will not behave
-    differently on a second attempt, so retrying them only burns the budget.
-    """
-    return RetryPolicy(
-        initial_interval=config.RETRY_INITIAL_INTERVAL,
-        backoff_coefficient=config.RETRY_BACKOFF_COEFFICIENT,
-        maximum_interval=config.RETRY_MAXIMUM_INTERVAL,
-        maximum_attempts=config.RETRY_MAXIMUM_ATTEMPTS,
-        non_retryable_error_types=list(config.NON_RETRYABLE_ERROR_TYPES),
     )
 
 
