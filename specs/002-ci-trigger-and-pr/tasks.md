@@ -119,19 +119,19 @@ Single Python project, extending feature 001. New code under `src/control_plane/
 
 **Independent Test**: send accepted, rejected and duplicate notifications and tell the three apart from the ingress's own output.
 
-- [ ] T031 [P] [US4] Unit test outcome recording in `tests/unit/test_ingress_outcomes.py` — every path produces an `IngressOutcome`, and rejections carry an explicit reason (SC-008)
-- [ ] T032 [US4] Record and log an `IngressOutcome` on every path in `src/control_plane/ingress/app.py`, with the commit it referred to (depends on T014)
+- [X] T031 [P] [US4] Unit test outcome recording in `tests/unit/test_ingress_outcomes.py` — every path produces an `IngressOutcome`, and rejections carry an explicit reason (SC-008)
+- [X] T032 [US4] Record and log an `IngressOutcome` on every path in `src/control_plane/ingress/app.py`, with the commit it referred to (depends on T014)
 
 ---
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T033 Write `scripts/demo_webhook.sh` — materialize the seed, create the bare remote, sign a payload, post it, wait for the run, print the pull request; `--duplicate N` sends N concurrently and asserts one run and one pull request
-- [ ] T034 [P] Update `.github/workflows/ci.yml` to run the new suite, and assert `SC-010` by running `pytest` with networking unavailable
-- [ ] T035 [P] Update `README.md` — the new demo, and the guarantees table gains the dedup and pull request rows
-- [ ] T036 [P] Add the webhook secret and host token placeholders to `.env.example`
-- [ ] T037 Run [quickstart.md](./quickstart.md) end to end on a clean checkout and correct any drift
-- [ ] T038 Confirm feature 001's demos still pass unchanged after the T008 refactor — `./scripts/demo.sh` and `./scripts/demo_kill_resume.sh`
+- [X] T033 Write `scripts/demo_webhook.sh` — materialize the seed, create the bare remote, sign a payload, post it, wait for the run, print the pull request; `--duplicate N` sends N concurrently and asserts one run and one pull request
+- [X] T034 [P] Update `.github/workflows/ci.yml` to run the new suite, and assert `SC-010` by running `pytest` with networking unavailable
+- [X] T035 [P] Update `README.md` — the new demo, and the guarantees table gains the dedup and pull request rows
+- [X] T036 [P] Add the webhook secret and host token placeholders to `.env.example`
+- [X] T037 Run [quickstart.md](./quickstart.md) end to end on a clean checkout and correct any drift
+- [X] T038 Confirm feature 001's demos still pass unchanged after the T008 refactor — `./scripts/demo.sh` and `./scripts/demo_kill_resume.sh`
 
 ---
 

@@ -13,8 +13,10 @@ Same as feature 001 — Python 3.12, Docker, the Temporal CLI — plus nothing. 
 local process and the remote is a bare repository on disk.
 
 ```bash
+uv venv --python 3.12
 uv pip install -e ".[dev]"
 docker build -t fixloop-sandbox:latest sandbox/
+export CONTROL_PLANE_WEBHOOK_SECRET=demo-secret   # the ingress refuses to start without it
 ```
 
 ## Run it
@@ -28,13 +30,17 @@ temporal server start-dev
 # 2 — the stand-in for the repository host
 python scripts/fake_host.py
 
-# 3 — worker and ingress
-python -m control_plane.worker &
-python -m control_plane.ingress
+# 3 — the worker (or scripts/worker_scripted.py to avoid model calls)
+python -m control_plane.worker
 
-# 4 — send a failed build
+# 4 — the ingress, then the notification
+python -m control_plane.ingress &
 ./scripts/demo_webhook.sh
 ```
+
+Each demo run adds a commit to the seed so its revision is new. That is deliberate:
+`REJECT_DUPLICATE` gives a commit exactly one run *ever*, so without a fresh revision the
+second demo on the same engine is deduplicated — correct, and useless to watch.
 
 `demo_webhook.sh` materializes the seed repository, creates a bare clone of it to act as the remote,
 signs a payload with the shared secret, posts it, waits for the run, and prints the pull request.
@@ -42,15 +48,15 @@ signs a payload with the shared secret, posts it, waits for the run, and prints 
 **Expected**:
 
 ```text
-==> posting a signed build-failure notification
-    HTTP 202  started  workflow fix-4b1a0d431c4e
+==> posting 1 signed build-failure notification(s)
+    HTTP 202  started
 
 ==> waiting for the run
-    status fixed, 3 attempts
 
 ==> the pull request
-    #1  Fix failing tests at 4b1a0d431c4e
-    created by this run: yes
+    #1  fix: failing tests at d080f2e390d0
+    http://127.0.0.1:8099/owner/broken-calculator/pull/1
+    pull requests for this branch: 1
 ```
 
 ## The property that matters (SC-002, SC-004)
@@ -62,11 +68,16 @@ signs a payload with the shared secret, posts it, waits for the run, and prints 
 Sends the same notification ten times, concurrently.
 
 ```text
-    1 x HTTP 202  started
-    9 x HTTP 200  deduplicated
-==> runs for this commit: 1
-==> pull requests for this branch: 1
+    HTTP 202  started
+    HTTP 200  deduplicated        (x9)
+
+    1 started, 9 deduplicated
+
+==> the pull request
+    pull requests for this branch: 1
 ```
+
+The script exits non-zero if more than one delivery starts a run.
 
 Nine of them are `200`, not an error: the sender did nothing wrong and must stop retrying. **There
 is no deduplication code in this repository** — `workflow_id = fix-<sha>` plus
@@ -86,7 +97,8 @@ turns that refusal into an answer.
 | SC-006 nothing is merged | `pytest tests/unit/test_host_adapter.py` — no merge call exists |
 | SC-007 ingress does not block | `pytest tests/integration/test_ingress.py` measures the response |
 | SC-008 every outcome recorded | `pytest tests/unit/test_ingress_outcomes.py` |
-| SC-010 works with no network | `pytest` on a disconnected machine |
+| SC-006 nothing is merged | `pytest tests/unit/test_host_adapter.py` — an AST check, not a grep |
+| SC-010 nothing reaches off-machine | `pytest tests/unit/test_offline_by_default.py` |
 
 ```bash
 pytest                       # the whole suite, offline
@@ -108,6 +120,7 @@ adapter is in.
 |---|---|---|
 | `401` from the ingress | Payload signed with a different secret | Both sides read `CONTROL_PLANE_WEBHOOK_SECRET` |
 | `503` from the ingress | Temporal is not running | `temporal server start-dev` |
-| `200 deduplicated` on a first run | A run for that sha already exists from an earlier demo | Terminate it, or use a fresh seed revision |
+| `200 deduplicated` on a first run | A run for that sha already exists, and REJECT_DUPLICATE is permanent | The demo makes a fresh commit each run; by hand, use `--force` on the CLI |
+| The kill-resume demo says INCONCLUSIVE | Another worker is already serving the task queue and finished the run first | Stop any stray `worker_scripted.py` before running it |
 | Run ends `conflicted` | `fix/<sha>` left over from a previous run | The demo script clears it; if run by hand, delete it |
 | Pull request never appears | The host stand-in is not running | Terminal 2 |
