@@ -9,7 +9,7 @@ resumes without paying twice. The second one is the demo the whole POC exists fo
 
 | Requirement | Check |
 |---|---|
-| Python 3.12 | `python3 --version` |
+| Python 3.12 | `uv python install 3.12` if your system Python is older |
 | Docker runtime | `docker info` |
 | Temporal CLI | `temporal --version` |
 | Anthropic credential | `ant auth status`, or `ANTHROPIC_API_KEY` exported |
@@ -17,7 +17,8 @@ resumes without paying twice. The second one is the demo the whole POC exists fo
 ## One-time setup
 
 ```bash
-uv sync                                  # or: pip install -e ".[dev]"
+uv venv --python 3.12
+uv pip install -e ".[dev]"               # or: pip install -e ".[dev]" in your own venv
 docker build -t fixloop-sandbox:latest sandbox/
 ```
 
@@ -123,18 +124,24 @@ as its first line.
 | Criterion | How to check |
 |---|---|
 | SC-001 red → green | `scripts/demo.sh` ends `fixed` |
-| SC-002 resume | `scripts/demo_kill_resume.sh` completes on the replacement worker |
-| SC-003 zero re-calls | count `propose_fix` entries in the history; equals attempt count |
+| SC-002 resume | `scripts/demo_kill_resume.sh` prints `PROVEN` and exits 0; it exits 2 with `INCONCLUSIVE` if the kill landed after the run finished |
+| SC-003 zero re-calls | the same script reports `propose_fix scheduled N time(s)`, equal to the attempt count |
 | SC-004 isolation | `pytest tests/integration/test_sandbox_isolation.py` — asserts no network and no host writes |
 | SC-005 result vs. exception | `pytest tests/unit/test_exit_code_contract.py` |
 | SC-006 idempotent apply | `pytest tests/unit/test_apply_patch_idempotent.py` |
 | SC-008 replay | `pytest tests/replay/test_determinism.py` |
 | SC-010 one branch | `pytest tests/integration/test_branch_idempotency.py` |
 | SC-011 repo untouched | `pytest tests/integration/test_operator_repo_untouched.py` |
+| FR-013 / SC-009 run record | `pytest tests/integration/test_run_record.py` |
+| Principle IV import discipline | `pytest tests/unit/test_workflow_import_discipline.py` |
 
 ```bash
-pytest                                   # everything except the two scripted demos
+pytest                                   # 63 tests; everything except the two demo scripts
+ruff check src tests && mypy             # lint and strict type check
 ```
+
+The same commands run in CI (`.github/workflows/ci.yml`), which also builds the sandbox image
+so the isolation tests assert against a real container rather than only against the flags.
 
 ## When it goes wrong
 
