@@ -93,8 +93,8 @@ async def test_the_workspace_is_destroyed_after_the_run(seed):
     from control_plane import config
 
     repo_path, revision = seed
-    before = set(config.WORKSPACE_ROOT.glob("run-*"))
+    before = set(config.workspace_root().glob("run-*"))
     await ActivityEnvironment().run(
         run_tests, RunTestsInput(repo_path=repo_path, revision=revision)
     )
-    assert set(config.WORKSPACE_ROOT.glob("run-*")) == before
+    assert set(config.workspace_root().glob("run-*")) == before

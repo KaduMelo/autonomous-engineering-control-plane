@@ -84,22 +84,22 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 ### Tests for User Story 2
 
-- [ ] T018 [P] [US2] Unit test apply idempotency in `tests/unit/test_apply_patch_idempotent.py` — applying the same diff twice yields an identical tree hash and never stacks (SC-006)
-- [ ] T019 [P] [US2] Integration test branch behavior in `tests/integration/test_branch_idempotency.py` — absent → created; present with the same patch → no-op success; present and divergent → `BranchConflictError`, nothing overwritten (SC-010)
-- [ ] T020 [P] [US2] Integration test in `tests/integration/test_operator_repo_untouched.py` — compare `HEAD`, index and worktree before and after a successful run; they must be identical (SC-011)
-- [ ] T021 [P] [US2] Workflow loop test in `tests/integration/test_fix_workflow_loop.py` using `WorkflowEnvironment.start_time_skipping()` and fake activities — stops at first green, never exceeds `max_attempts`, a patch that fails to apply spends the attempt and continues, and an already-green repository ends with zero attempts (FR-017)
+- [X] T018 [P] [US2] Unit test apply idempotency in `tests/unit/test_apply_patch_idempotent.py` — applying the same diff twice yields an identical tree hash and never stacks (SC-006)
+- [X] T019 [P] [US2] Integration test branch behavior in `tests/integration/test_branch_idempotency.py` — absent → created; present with the same patch → no-op success; present and divergent → `BranchConflictError`, nothing overwritten (SC-010)
+- [X] T020 [P] [US2] Integration test in `tests/integration/test_operator_repo_untouched.py` — compare `HEAD`, index and worktree before and after a successful run; they must be identical (SC-011)
+- [X] T021 [P] [US2] Workflow loop test in `tests/integration/test_fix_workflow_loop.py` using `WorkflowEnvironment.start_time_skipping()` and fake activities — stops at first green, never exceeds `max_attempts`, a patch that fails to apply spends the attempt and continues, and an already-green repository ends with zero attempts (FR-017)
 
 ### Implementation for User Story 2
 
-- [ ] T022 [P] [US2] Define the `FixerPort` protocol in `src/control_plane/adapters/fixer.py` so the workflow depends on an interface, not a vendor
-- [ ] T023 [US2] Implement `AnthropicFixer` in `src/control_plane/adapters/fixer.py` — `claude-opus-5`, `thinking={"type": "adaptive"}`, `output_config={"effort": "high"}`, `max_tokens=16000`, `client.messages.parse(output_format=FixProposal)` against [contracts/fix_proposal.schema.json](./contracts/fix_proposal.schema.json), and **`AsyncAnthropic(max_retries=0, timeout=240.0)`** so Temporal is the only retry layer (depends on T022)
-- [ ] T024 [P] [US2] Implement the `analyze_repo` activity in `src/control_plane/activities/analyze.py` — gather the failing test files named in the baseline result plus the modules they import, bounded in size (depends on T009)
-- [ ] T025 [P] [US2] Implement the `propose_fix` activity in `src/control_plane/activities/propose.py` — classify errors: `RateLimitError`/`InternalServerError`/`APIConnectionError`/`APITimeoutError` propagate for retry; `BadRequestError`/`AuthenticationError`/`PermissionDeniedError`/`NotFoundError` wrap in a non-retryable `ApplicationError`. The API key is read here and nowhere else (depends on T023)
-- [ ] T026 [P] [US2] Implement the `apply_patch` activity in `src/control_plane/activities/patch.py` — clean checkout, apply, return the change with `tree_hash`; raise `PatchApplyError` when the diff does not apply (depends on T009)
-- [ ] T027 [P] [US2] Implement the `create_fix_branch` activity in `src/control_plane/activities/branch.py` — resolve `fix/<revision>`, check-if-exists, write the ref directly without touching `HEAD` (depends on T009)
-- [ ] T028 [US2] Implement `FixWorkflow` in `src/control_plane/workflows/fix_workflow.py` — baseline `run_tests(revision, None)` first, then the propose→apply→validate loop, then `create_fix_branch`; assemble `RunOutcome` with status `fixed`, `exhausted` or `conflicted` (depends on T024–T027)
-- [ ] T029 [US2] Register the remaining activities in `src/control_plane/worker.py` with their start-to-close timeouts from `config.py` (depends on T028)
-- [ ] T030 [US2] Implement the CLI in `src/control_plane/cli.py` — `fixctl run --repo <path> --sha <sha>`, starting the workflow with `workflow_id=f"fix-{revision}"` so duplicate starts are rejected by the engine (depends on T029)
+- [X] T022 [P] [US2] Define the `FixerPort` protocol in `src/control_plane/adapters/fixer.py` so the workflow depends on an interface, not a vendor
+- [X] T023 [US2] Implement `AnthropicFixer` in `src/control_plane/adapters/fixer.py` — `claude-opus-5`, `thinking={"type": "adaptive"}`, `output_config={"effort": "high"}`, `max_tokens=16000`, `client.messages.parse(output_format=FixProposal)` against [contracts/fix_proposal.schema.json](./contracts/fix_proposal.schema.json), and **`AsyncAnthropic(max_retries=0, timeout=240.0)`** so Temporal is the only retry layer (depends on T022)
+- [X] T024 [P] [US2] Implement the `analyze_repo` activity in `src/control_plane/activities/analyze.py` — gather the failing test files named in the baseline result plus the modules they import, bounded in size (depends on T009)
+- [X] T025 [P] [US2] Implement the `propose_fix` activity in `src/control_plane/activities/propose.py` — classify errors: `RateLimitError`/`InternalServerError`/`APIConnectionError`/`APITimeoutError` propagate for retry; `BadRequestError`/`AuthenticationError`/`PermissionDeniedError`/`NotFoundError` wrap in a non-retryable `ApplicationError`. The API key is read here and nowhere else (depends on T023)
+- [X] T026 [P] [US2] Implement the `apply_patch` activity in `src/control_plane/activities/patch.py` — clean checkout, apply, return the change with `tree_hash`; raise `PatchApplyError` when the diff does not apply (depends on T009)
+- [X] T027 [P] [US2] Implement the `create_fix_branch` activity in `src/control_plane/activities/branch.py` — resolve `fix/<revision>`, check-if-exists, write the ref directly without touching `HEAD` (depends on T009)
+- [X] T028 [US2] Implement `FixWorkflow` in `src/control_plane/workflows/fix_workflow.py` — baseline `run_tests(revision, None)` first, then the propose→apply→validate loop, then `create_fix_branch`; assemble `RunOutcome` with status `fixed`, `exhausted` or `conflicted` (depends on T024–T027)
+- [X] T029 [US2] Register the remaining activities in `src/control_plane/worker.py` with their start-to-close timeouts from `config.py` (depends on T028)
+- [X] T030 [US2] Implement the CLI in `src/control_plane/cli.py` — `fixctl run --repo <path> --sha <sha>`, starting the workflow with `workflow_id=f"fix-{revision}"` so duplicate starts are rejected by the engine (depends on T029)
 
 **Checkpoint**: Red seed → green PR-ready branch, end to end. This is the first increment with demonstrable value.
 
