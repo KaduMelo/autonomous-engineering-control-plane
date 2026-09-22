@@ -27,11 +27,11 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 **Purpose**: The skeleton and the two fixtures everything else runs against.
 
-- [ ] T001 Create the package and test tree per plan.md in `src/control_plane/{domain,workflows,activities,adapters}/` and `tests/{unit,integration,replay}/`, each with `__init__.py`
-- [ ] T002 Initialize the project in `pyproject.toml` — Python 3.12, dependencies `temporalio`, `anthropic`, `pydantic`; dev dependencies `pytest`, `pytest-asyncio`, `ruff`, `mypy`
-- [ ] T003 [P] Configure `ruff` and `mypy` in `pyproject.toml`, with `src/control_plane/workflows/` set to disallow imports from `adapters` so Principle IV is machine-checked
-- [ ] T004 [P] Build the seed repository in `seed/broken-calculator/` — a small Python package with a deterministic failing test, committed so its revision sha is stable
-- [ ] T005 [P] Write `sandbox/Dockerfile` — `python:3.12-slim`, pytest and the seed suite's dependencies installed at build time, a non-root user, and no entrypoint that needs network
+- [X] T001 Create the package and test tree per plan.md in `src/control_plane/{domain,workflows,activities,adapters}/` and `tests/{unit,integration,replay}/`, each with `__init__.py`
+- [X] T002 Initialize the project in `pyproject.toml` — Python 3.12, dependencies `temporalio`, `anthropic`, `pydantic`; dev dependencies `pytest`, `pytest-asyncio`, `ruff`, `mypy`
+- [X] T003 [P] Configure `ruff` and `mypy` in `pyproject.toml`, with `src/control_plane/workflows/` set to disallow imports from `adapters` so Principle IV is machine-checked
+- [X] T004 [P] Build the seed repository in `seed/broken-calculator/` — a small Python package with a deterministic failing test, committed so its revision sha is stable
+- [X] T005 [P] Write `sandbox/Dockerfile` — `python:3.12-slim`, pytest and the seed suite's dependencies installed at build time, a non-root user, and no entrypoint that needs network
 
 ---
 
@@ -41,11 +41,11 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T006 [P] Define the domain models in `src/control_plane/domain/models.py` — `FixRequest`, `SourceFile`, `RepositoryContext`, `ProposedChange`, `TestResult`, `Attempt`, `FixBranch`, `RunOutcome`, per data-model.md. Frozen, serializable, no live handles
-- [ ] T007 [P] Define the error types in `src/control_plane/domain/errors.py` — `TestRunnerError`, `PatchApplyError`, `BranchConflictError`
-- [ ] T008 [P] Centralize configuration in `src/control_plane/config.py` — timeouts, `max_attempts`, sandbox image tag, model id, task queue, workspace root
-- [ ] T009 Implement the git adapter in `src/control_plane/adapters/repo.py` — `clean_checkout(repo_path, revision)` into a throwaway directory, `apply_diff`, `tree_hash`, and ref read/write helpers that never touch `HEAD`, the index or the worktree (depends on T007, T008)
-- [ ] T010 Create the worker entrypoint in `src/control_plane/worker.py` registering the workflow and activities against the configured task queue (depends on T008)
+- [X] T006 [P] Define the domain models in `src/control_plane/domain/models.py` — `FixRequest`, `SourceFile`, `RepositoryContext`, `ProposedChange`, `TestResult`, `Attempt`, `FixBranch`, `RunOutcome`, per data-model.md. Frozen, serializable, no live handles
+- [X] T007 [P] Define the error types in `src/control_plane/domain/errors.py` — `TestRunnerError`, `PatchApplyError`, `BranchConflictError`
+- [X] T008 [P] Centralize configuration in `src/control_plane/config.py` — timeouts, `max_attempts`, sandbox image tag, model id, task queue, workspace root
+- [X] T009 Implement the git adapter in `src/control_plane/adapters/repo.py` — `clean_checkout(repo_path, revision)` into a throwaway directory, `apply_diff`, `tree_hash`, and ref read/write helpers that never touch `HEAD`, the index or the worktree (depends on T007, T008)
+- [X] T010 Create the worker entrypoint in `src/control_plane/worker.py` registering the workflow and activities against the configured task queue (depends on T008)
 
 **Checkpoint**: Types and git plumbing exist. User story work can begin.
 
