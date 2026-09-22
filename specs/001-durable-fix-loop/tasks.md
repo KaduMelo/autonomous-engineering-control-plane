@@ -133,9 +133,9 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 **Independent Test**: After any finished run, identify each attempt's proposal, application outcome and verdict in order, plus the terminal outcome and its reason, without additional instrumentation.
 
-- [ ] T037 [P] [US4] Ensure `RunOutcome` carries the full `Attempt` list including each proposal's diff and rationale, so a green verdict can be audited against what actually changed (FR-013, SC-009) in `src/control_plane/workflows/fix_workflow.py`
-- [ ] T038 [US4] Include attempt ordinal and elapsed time in the `run_tests` heartbeat details in `src/control_plane/activities/test_runner.py`, so an in-flight run is legible in the Temporal UI (depends on T015)
-- [ ] T039 [US4] Integration test in `tests/integration/test_run_record.py` — a finished run's outcome reconstructs the full narrative, and an exhausted run states its terminal reason explicitly
+- [X] T037 [P] [US4] Ensure `RunOutcome` carries the full `Attempt` list including each proposal's diff and rationale, so a green verdict can be audited against what actually changed (FR-013, SC-009) in `src/control_plane/workflows/fix_workflow.py`
+- [X] T038 [US4] Include attempt ordinal and elapsed time in the `run_tests` heartbeat details in `src/control_plane/activities/test_runner.py`, so an in-flight run is legible in the Temporal UI (depends on T015)
+- [X] T039 [US4] Integration test in `tests/integration/test_run_record.py` — a finished run's outcome reconstructs the full narrative, and an exhausted run states its terminal reason explicitly
 
 **Checkpoint**: All four user stories independently functional.
 
@@ -143,11 +143,11 @@ Single Python project. Source under `src/control_plane/`, tests under `tests/`, 
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T040 [P] Write `scripts/demo.sh` — reset the seed repository to its red revision, delete any leftover `fix/<sha>` branch, start the run
-- [ ] T041 [P] Rewrite `README.md` — what the control plane is, the two demos, and links to spec, plan and constitution
-- [ ] T042 [P] Add `.github/workflows/ci.yml` — ruff, mypy, and pytest for the unit and replay suites; the integration suite gated on a Docker runtime being available
-- [ ] T043 [P] Add `.env.example` with an `ANTHROPIC_API_KEY` placeholder, matching the `.gitignore` exclusion
-- [ ] T044 Run [quickstart.md](./quickstart.md) end to end on a clean checkout and correct any drift between what it says and what the code does
+- [X] T040 [P] Write `scripts/demo.sh` — reset the seed repository to its red revision, delete any leftover `fix/<sha>` branch, start the run
+- [X] T041 [P] Rewrite `README.md` — what the control plane is, the two demos, and links to spec, plan and constitution
+- [X] T042 [P] Add `.github/workflows/ci.yml` — ruff, mypy, and pytest for the unit and replay suites; the integration suite gated on a Docker runtime being available
+- [X] T043 [P] Add `.env.example` with an `ANTHROPIC_API_KEY` placeholder, matching the `.gitignore` exclusion
+- [X] T044 Run [quickstart.md](./quickstart.md) end to end on a clean checkout and correct any drift between what it says and what the code does
 
 ---
 
