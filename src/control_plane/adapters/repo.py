@@ -124,9 +124,7 @@ def tree_of(repo_path: str | Path, commit: str) -> str:
     return _git(repo_path, "rev-parse", f"{commit}^{{tree}}").stdout.decode().strip()
 
 
-def commit_tree(
-    repo_path: str | Path, tree: str, parent: str, message: str
-) -> str:
+def commit_tree(repo_path: str | Path, tree: str, parent: str, message: str) -> str:
     """Create a commit object. Identity is pinned so the sha is reproducible."""
     env = {
         "GIT_DIR": _git_dir(repo_path),
@@ -155,9 +153,9 @@ def update_ref(repo_path: str | Path, ref: str, commit: str) -> None:
 def head_state(repo_path: str | Path) -> tuple[str, str, str]:
     """(HEAD sha, symbolic HEAD, porcelain status) - the before/after fingerprint."""
     head = _git(repo_path, "rev-parse", "HEAD").stdout.decode().strip()
-    symbolic = _git(
-        repo_path, "symbolic-ref", "--quiet", "HEAD", check=False
-    ).stdout.decode().strip()
+    symbolic = (
+        _git(repo_path, "symbolic-ref", "--quiet", "HEAD", check=False).stdout.decode().strip()
+    )
     status = subprocess.run(
         ["git", "-C", str(repo_path), "status", "--porcelain"],
         capture_output=True,

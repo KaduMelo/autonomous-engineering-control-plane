@@ -21,6 +21,8 @@ class TestRunnerError(ControlPlaneError):
     and SIGKILL from the timeout. Retryable: the runner may work next time.
     """
 
+    __test__ = False
+
 
 class PatchApplyError(ControlPlaneError):
     """The proposed diff is malformed or does not apply to the target revision.
