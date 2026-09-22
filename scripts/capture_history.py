@@ -43,7 +43,14 @@ async def main() -> None:
             handle = env.client.get_workflow_handle(workflow_id)
             outcome = await env.client.execute_workflow(
                 FixWorkflow.run,
-                FixRequest(repo_path="/seed", revision=REVISION, max_attempts=3),
+                FixRequest(
+                    repo_path="/seed",
+                    revision=REVISION,
+                    max_attempts=3,
+                    # Set so the recorded history covers open_pr too - a history
+                    # that stops before the last activity pins less than it looks.
+                    repository_full_name="owner/name",
+                ),
                 id=workflow_id,
                 task_queue=queue,
             )

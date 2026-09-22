@@ -23,6 +23,7 @@ from control_plane.domain.models import (
     AnalyzeInput,
     ApplyInput,
     BranchInput,
+    CloneInput,
     FixBranch,
     FixRequest,
     ProposedChange,
@@ -99,6 +100,12 @@ async def fake_create_fix_branch(request: BranchInput) -> FixBranch:
     )
 
 
+@activity.defn(name="ensure_clone")
+async def fake_ensure_clone(request: CloneInput) -> str:
+    """The repository is a given in these tests; obtaining it is not what they check."""
+    return "cache-key"
+
+
 @pytest.fixture
 async def env():
     async with await WorkflowEnvironment.start_time_skipping(
@@ -125,6 +132,7 @@ async def run(env):
         task_queue=queue,
         workflows=[FixWorkflow],
         activities=[
+            fake_ensure_clone,
             fake_run_tests,
             fake_analyze_repo,
             fake_propose_fix,

@@ -16,15 +16,19 @@ with workflow.unsafe.imports_passed_through():
     from control_plane import config
     from control_plane.activities.analyze import analyze_repo
     from control_plane.activities.branch import create_fix_branch
+    from control_plane.activities.clone import ensure_clone
     from control_plane.activities.patch import apply_patch
     from control_plane.activities.propose import propose_fix
+    from control_plane.activities.pull_request import open_pr
     from control_plane.activities.test_runner import run_tests
     from control_plane.domain.models import (
         AnalyzeInput,
         ApplyInput,
         Attempt,
         BranchInput,
+        CloneInput,
         FixRequest,
+        OpenPullRequestInput,
         ProposedChange,
         ProposeInput,
         RunOutcome,
@@ -44,6 +48,15 @@ def failure_type(error: BaseException) -> str | None:
 class FixWorkflow:
     @workflow.run
     async def run(self, request: FixRequest) -> RunOutcome:
+        # The repository may be a URL. Nothing can read it until it is here.
+        await workflow.execute_activity(
+            ensure_clone,
+            CloneInput(source=request.repo_path, revision=request.revision),
+            start_to_close_timeout=config.CLONE_TIMEOUT,
+            retry_policy=config.retry_policy(),
+            heartbeat_timeout=config.CLONE_HEARTBEAT,
+        )
+
         # Baseline. This single call does three jobs: it exercises the validator,
         # it discovers which tests fail, and it is the FR-017 gate for a
         # repository that is already green.
@@ -138,11 +151,33 @@ class FixWorkflow:
                 # content. The patch is preserved; nothing is overwritten.
                 return RunOutcome(status="conflicted", attempts=attempts, winning_change=change)
 
+            pull_request = None
+            if request.repository_full_name:
+                # A pull request needs a host. A local path handed over by an
+                # operator has none, and feature 001's demo depends on that
+                # staying true - so the decision is an input, not a probe.
+                pull_request = await workflow.execute_activity(
+                    open_pr,
+                    OpenPullRequestInput(
+                        source=request.repo_path,
+                        repository_full_name=request.repository_full_name,
+                        revision=request.revision,
+                        branch=branch.name,
+                        failing_tests=list(baseline.failing_tests),
+                        winning_diff=change.diff,
+                        rationale=change.rationale,
+                        attempts=len(attempts),
+                    ),
+                    start_to_close_timeout=config.OPEN_PR_TIMEOUT,
+                    retry_policy=config.retry_policy(),
+                )
+
             return RunOutcome(
                 status="fixed",
                 attempts=attempts,
                 winning_change=change,
                 branch=branch,
+                pull_request=pull_request,
             )
 
         return RunOutcome(status="exhausted", attempts=attempts)

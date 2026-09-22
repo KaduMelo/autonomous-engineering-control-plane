@@ -95,19 +95,19 @@ Single Python project, extending feature 001. New code under `src/control_plane/
 
 ### Tests for User Story 3
 
-- [ ] T021 [P] [US3] Unit test the host adapter's response mapping in `tests/unit/test_host_adapter.py` — 201 created, 422-already-exists is a **result**, other 422s and 401/403/404 are non-retryable, 5xx and 429 are retryable, and **no merge call exists anywhere** (SC-006)
-- [ ] T022 [P] [US3] Unit test the pull request body in `tests/unit/test_pr_body.py` — it names the broken commit, the failing tests, the winning diff and the attempt count (FR-011, SC-009)
-- [ ] T023 [P] [US3] Integration test `open_pr` in `tests/integration/test_open_pr.py` against the stand-in — one pull request; running twice still one; an existing one is reported with `created=False`; exhausted and conflicted runs open none (SC-004, SC-005)
+- [X] T021 [P] [US3] Unit test the host adapter's response mapping in `tests/unit/test_host_adapter.py` — 201 created, 422-already-exists is a **result**, other 422s and 401/403/404 are non-retryable, 5xx and 429 are retryable, and **no merge call exists anywhere** (SC-006)
+- [X] T022 [P] [US3] Unit test the pull request body in `tests/unit/test_pr_body.py` — it names the broken commit, the failing tests, the winning diff and the attempt count (FR-011, SC-009)
+- [X] T023 [P] [US3] Integration test `open_pr` in `tests/integration/test_open_pr.py` against the stand-in — one pull request; running twice still one; an existing one is reported with `created=False`; exhausted and conflicted runs open none (SC-004, SC-005)
 
 ### Implementation for User Story 3
 
-- [ ] T024 [P] [US3] Define `RepositoryHostPort` and implement `GitHubHost` over `httpx2` in `src/control_plane/adapters/host.py`, with a configurable base URL, following [contracts/host_api.md](./contracts/host_api.md) (depends on T005)
-- [ ] T025 [P] [US3] Implement the runnable stand-in in `scripts/fake_host.py` — a Starlette app over in-memory state implementing both endpoints of the same contract
-- [ ] T026 [US3] Implement the `open_pr` activity in `src/control_plane/activities/pull_request.py` — push, query, create-if-absent, with the error classification from [contracts/activities.md](./contracts/activities.md) (depends on T006, T024)
-- [ ] T027 [US3] Render the pull request body in `src/control_plane/activities/pull_request.py` — in the activity, never in the workflow (depends on T026)
-- [ ] T028 [US3] Extend `FixWorkflow` in `src/control_plane/workflows/fix_workflow.py` to call `open_pr` after `create_fix_branch`, only on `status == "fixed"` (depends on T026)
-- [ ] T029 [US3] Register `ensure_clone` and `open_pr` in `src/control_plane/worker.py` and extend `NON_RETRYABLE_ERROR_TYPES` in `config.py` (depends on T007, T026)
-- [ ] T030 [US3] Re-record the replay history with `python scripts/capture_history.py` — the activity sequence changed on purpose, which is exactly when re-recording is meant to happen — and extend `tests/fakes.py` with the two new activities (depends on T028)
+- [X] T024 [P] [US3] Define `RepositoryHostPort` and implement `GitHubHost` over `httpx2` in `src/control_plane/adapters/host.py`, with a configurable base URL, following [contracts/host_api.md](./contracts/host_api.md) (depends on T005)
+- [X] T025 [P] [US3] Implement the runnable stand-in in `scripts/fake_host.py` — a Starlette app over in-memory state implementing both endpoints of the same contract
+- [X] T026 [US3] Implement the `open_pr` activity in `src/control_plane/activities/pull_request.py` — push, query, create-if-absent, with the error classification from [contracts/activities.md](./contracts/activities.md) (depends on T006, T024)
+- [X] T027 [US3] Render the pull request body in `src/control_plane/activities/pull_request.py` — in the activity, never in the workflow (depends on T026)
+- [X] T028 [US3] Extend `FixWorkflow` in `src/control_plane/workflows/fix_workflow.py` to call `open_pr` after `create_fix_branch`, only on `status == "fixed"` (depends on T026)
+- [X] T029 [US3] Register `ensure_clone` and `open_pr` in `src/control_plane/worker.py` and extend `NON_RETRYABLE_ERROR_TYPES` in `config.py` (depends on T007, T026)
+- [X] T030 [US3] Re-record the replay history with `python scripts/capture_history.py` — the activity sequence changed on purpose, which is exactly when re-recording is meant to happen — and extend `tests/fakes.py` with the two new activities (depends on T028)
 
 **Checkpoint**: green run → exactly one pull request. With US1 and US2, the milestone is complete.
 
