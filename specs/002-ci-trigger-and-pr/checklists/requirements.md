@@ -48,4 +48,8 @@
   Principle II (isolation and credential boundary); FR-006/FR-007/FR-016 ↔ Principle VI (bounded
   time); FR-015 ↔ the observability rule, which the ingress needs because a rejected notification
   leaves no trace in the run history at all.
+- **Offline-only, decided 2026-09-22.** No real-repository path, no tunnel, no CI installation, no
+  token. The known cost is written into the spec rather than left for a reviewer to discover: the
+  real repository-host adapter is never exercised, so the feature proves the control plane's side of
+  the contract and not that the host accepts it. Same situation as the fixer's real adapter.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`.

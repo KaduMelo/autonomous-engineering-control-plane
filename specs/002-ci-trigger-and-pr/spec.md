@@ -29,10 +29,16 @@ Recorded here so they are visible and correctable, rather than buried in the pla
 - **Authenticity is verified with an HMAC signature over the request body**, compared in constant
   time — what GitHub itself sends. Stateless, no external dependency, and the same verification
   serves both a real delivery and a locally generated one.
-- **Tests and the default demo run fully offline**: a locally generated signed payload against a
-  bare repository acting as the remote. The demo script points at a real GitHub repository when one
-  is configured. Offline by default keeps the demo reproducible, which the constitution requires;
-  the real path is what proves the milestone end to end.
+- **Everything runs offline. There is no configured real-repository path.** A locally generated
+  signed payload reaches the ingress, the branch is pushed to a bare repository acting as the
+  remote, and the pull request is created through a local stand-in for the repository host's API.
+  No tunnel, no CI installation, no token needed to run anything.
+
+  The cost is stated rather than hidden: **the real repository-host adapter is never exercised**.
+  A pull request is an API concept, not a git one, so an offline run proves the control plane's
+  side of the contract — one request, idempotent, with the right contents — and not that the host
+  accepts it. This mirrors the fixer, whose real adapter no test exercises either, and it is the
+  deliberate trade for a demo that runs anywhere with no setup.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -215,8 +221,9 @@ is distinguishable from the ingress's own output.
 
 ### Measurable Outcomes
 
-- **SC-001**: A failed build reported by CI results in a fix run for that commit with zero human
-  actions, demonstrated end to end from a reproducible script.
+- **SC-001**: A build-failure notification results in a fix run for that commit with zero human
+  actions, demonstrated end to end from a reproducible script that needs no network, no token and no
+  hosted repository.
 - **SC-002**: Sending the same notification ten times, concurrently, produces exactly one run.
 - **SC-003**: 100% of notifications that are unverifiable, malformed, or describe a successful build
   result in no run.
@@ -232,11 +239,17 @@ is distinguishable from the ingress's own output.
   deduplication without reading the run history.
 - **SC-009**: A reviewer can tell from the pull request alone what broke, what changed, and how many
   attempts it took, without opening the durable engine's UI.
+- **SC-010**: The full suite and both demo scripts pass on a machine with no network access, no
+  repository-host token and no CI platform configured.
 
 ## Assumptions
 
-- The target repository is hosted on GitHub and the control plane has a token with permission to
-  clone it, push a branch, and open a pull request on it. Other hosts are out of scope.
+- The repository host is GitHub-shaped: clone over git, push a branch, create a pull request through
+  an HTTP API. Other hosts are out of scope.
+- **Nothing in this feature requires network access, a hosted repository, a CI installation or a
+  token.** Tests and the demo use a bare repository as the remote and a local stand-in for the
+  host's API. Pointing the system at a real repository is a configuration change, not a code change,
+  and is out of scope here.
 - The CI platform can send an authenticated HTTP notification on build completion. The seed setup
   stands in for a real CI installation.
 - Feature 001 is merged: the durable loop, the sandbox, and the deterministic `fix/<sha>` branch
