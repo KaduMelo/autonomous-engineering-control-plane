@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "control-plane"
+version = "0.1.0"
+description = "Autonomous engineering control plane - a durable self-fixing agent loop"
+requires-python = ">=3.12"
+dependencies = [
+    "temporalio>=1.7",
+    "anthropic>=0.40",
+    "pydantic>=2.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.7",
+    "mypy>=1.13",
+]
+
+[project.scripts]
+fixctl = "control_plane.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/control_plane"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "docker: requires a working Docker runtime",
+    "llm: calls the real Anthropic API and costs money",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "TID"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["control_plane"]
+
+[[tool.mypy.overrides]]
+module = ["temporalio.*"]
+follow_untyped_imports = true
