@@ -224,6 +224,15 @@ the over-scope risk in §9 takes in practice.
 | **1 — Governance** | Approval signal + SLA timer + `report_failure` | Human gate works; SLA fires | +days |
 | **2 — Trigger + PR (closes C)** | Ingress webhook (start-per-build, dedup) + idempotent `open_pr` | **Failed build → green PR** | +days |
 
+**Delivery order: 0 → 2 → 1.** Phase 2 carries the last two **MUST** items (US1, US2)
+and closes the declared scope; Phase 1 is entirely **SHOULD** (US7 alone). Building a
+SHOULD before two MUSTs is priority inversion, and the §5 table says so plainly now that
+there is no COULD tier to blur it. Phase 2 is also cheaper than this table suggests: US2's
+mechanism already ships — `workflow_id = fix-<sha>` makes Temporal itself reject the
+duplicate — and `open_pr` reuses the deterministic branch `create_fix_branch` already
+writes, so what is left is a push and a PR call. The phase *numbers* are kept as
+identities because other documents reference them.
+
 **Implementation order (inside Phase 0):** `run_tests` (the objective feedback is the foundation of everything) → `propose_fix` → `apply_patch` → the end-to-end loop without the gate.
 
 **Dependencies:**
