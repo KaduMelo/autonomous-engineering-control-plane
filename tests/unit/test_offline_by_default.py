@@ -46,3 +46,35 @@ def test_no_module_hardcodes_a_public_host():
 def test_no_token_is_required_to_run():
     """A suite that needs a credential to pass is a suite nobody runs."""
     assert config.host_token(), "there must be a usable default for the offline stand-in"
+
+
+def test_an_empty_environment_variable_behaves_like_an_unset_one(monkeypatch):
+    """The bug CI found and the local suite could not.
+
+    `os.environ.get(KEY, default)` returns "" for a variable that is set but
+    empty, so the default never applies. Anything here with a usable default
+    must treat the two the same.
+    """
+    import importlib
+
+    monkeypatch.setenv("CONTROL_PLANE_HOST_TOKEN", "")
+    monkeypatch.setenv("CONTROL_PLANE_HOST_API", "")
+    monkeypatch.setenv("CONTROL_PLANE_TASK_QUEUE", "")
+    reloaded = importlib.reload(config)
+    try:
+        assert reloaded.host_token(), "an empty token must fall back to the default"
+        assert reloaded.HOST_API_BASE_URL.startswith("http")
+        assert reloaded.TASK_QUEUE
+    finally:
+        monkeypatch.undo()
+        importlib.reload(config)
+
+
+def test_the_webhook_secret_deliberately_does_not_fall_back(monkeypatch):
+    """The one exception, and it is a security property, not an oversight.
+
+    An unset secret must reject every notification rather than quietly adopt a
+    default that an attacker could also guess.
+    """
+    monkeypatch.setenv("CONTROL_PLANE_WEBHOOK_SECRET", "")
+    assert config.webhook_secret() == b""

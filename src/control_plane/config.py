@@ -1,5 +1,10 @@
 """Every ceiling and every external identifier, in one place.
 
+Defaults are written `os.environ.get(KEY) or default`, never
+`os.environ.get(KEY, default)`. The second form returns "" for a variable that
+is set but empty, so the default never applies - which is how CI, where the
+variables are set to "" on purpose, found a failure the local suite could not.
+
 Timeouts are laid out so the inner limit always fires before the outer one -
 that is what keeps a failure attributable to the thing that actually failed
 rather than to Temporal noticing late.
@@ -15,11 +20,11 @@ from typing import TYPE_CHECKING, Literal
 if TYPE_CHECKING:
     from temporalio.common import RetryPolicy
 
-TASK_QUEUE = os.environ.get("CONTROL_PLANE_TASK_QUEUE", "fix-loop")
-TEMPORAL_TARGET = os.environ.get("TEMPORAL_TARGET", "localhost:7233")
+TASK_QUEUE = os.environ.get("CONTROL_PLANE_TASK_QUEUE") or "fix-loop"
+TEMPORAL_TARGET = os.environ.get("TEMPORAL_TARGET") or "localhost:7233"
 
 # --- Sandbox ---
-SANDBOX_IMAGE = os.environ.get("SANDBOX_IMAGE", "fixloop-sandbox:latest")
+SANDBOX_IMAGE = os.environ.get("SANDBOX_IMAGE") or "fixloop-sandbox:latest"
 SANDBOX_MEMORY = "512m"
 SANDBOX_PIDS_LIMIT = 256
 SANDBOX_CPUS = "2.0"
@@ -45,7 +50,7 @@ def workspace_root() -> Path:
 
 
 # --- Fix proposer ---
-MODEL_ID = os.environ.get("CONTROL_PLANE_MODEL", "claude-opus-5")
+MODEL_ID = os.environ.get("CONTROL_PLANE_MODEL") or "claude-opus-5"
 MODEL_MAX_TOKENS = 16_000
 # Typed as the Literal the SDK expects, so a typo is a type error rather than
 # a 400 at run time.
@@ -105,8 +110,8 @@ def retry_policy() -> RetryPolicy:
 
 
 # --- Ingress (feature 002) ---
-INGRESS_HOST = os.environ.get("CONTROL_PLANE_INGRESS_HOST", "127.0.0.1")
-INGRESS_PORT = int(os.environ.get("CONTROL_PLANE_INGRESS_PORT", "8080"))
+INGRESS_HOST = os.environ.get("CONTROL_PLANE_INGRESS_HOST") or "127.0.0.1"
+INGRESS_PORT = int(os.environ.get("CONTROL_PLANE_INGRESS_PORT") or "8080")
 # Shared secret for the HMAC over the raw request body. Read at call time so a
 # test can set it; see workspace_root() for why import-time binding is a trap.
 WEBHOOK_SECRET_ENV = "CONTROL_PLANE_WEBHOOK_SECRET"
@@ -120,12 +125,12 @@ def webhook_secret() -> bytes:
 # --- Repository host (feature 002) ---
 # Points at the local stand-in by default. Nothing else about the adapter
 # changes between offline and a real host.
-HOST_API_BASE_URL = os.environ.get("CONTROL_PLANE_HOST_API", "http://127.0.0.1:8099")
+HOST_API_BASE_URL = os.environ.get("CONTROL_PLANE_HOST_API") or "http://127.0.0.1:8099"
 HOST_TOKEN_ENV = "CONTROL_PLANE_HOST_TOKEN"
 
 
 def host_token() -> str:
-    return os.environ.get(HOST_TOKEN_ENV, "offline-stand-in-token")
+    return os.environ.get(HOST_TOKEN_ENV) or "offline-stand-in-token"
 
 
 def clone_cache_root() -> Path:
